@@ -2,6 +2,7 @@ import React from 'react'
 import Image from "next/image"
 import {MenuIcon, ChevronDownIcon, HomeIcon, SearchIcon} from "@heroicons/react/solid"
 import {StarIcon, BellIcon, ChatIcon, GlobeIcon, PlusIcon, SparklesIcon, SpeakerphoneIcon, VideoCameraIcon} from "@heroicons/react/outline"
+import { signIn } from 'next-auth/react'
 
 const Header = () => {
   return (
@@ -35,7 +36,7 @@ const Header = () => {
             <div className="ml-5 flex items-center lg:hidden">
                 <MenuIcon className="icon"/>
             </div>
-            <div className="hidden lg:flex items-center cursor-pointer space-x-2 border border-gray-100 p-2">
+            <div onClick={() => signIn()} className="hidden lg:flex items-center cursor-pointer space-x-2 border border-gray-100 p-2">
                 <div className="relative h-5 w-5 flex-shrink-0">
                     <Image objectFit="contain" layout="fill" src="https://links.papareact.com/23l"  alt="" />
                 </div>
