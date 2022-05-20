@@ -8,4 +8,4 @@ export default NextAuth({
             clientSecret: process.env.REDDIT_CLIENT_SECRET,
         }),
     ]
-})
+}) 

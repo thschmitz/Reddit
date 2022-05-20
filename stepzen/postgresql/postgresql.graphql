@@ -99,7 +99,6 @@ type Mutation {
   insertPost(
     image: String!
     body: String!
-    created_at: DateTime!
     subreddit_id: ID!
     title: String!
     username: String!
