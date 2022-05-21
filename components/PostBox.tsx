@@ -49,6 +49,7 @@ const PostBox = () => {
                 // create subreddit
 
                 console.log("Subreddit in me! Creating a new subreddit!")
+                console.log("Creating Post...", formData)
 
                 const {data: { insertSubreddit: newSubreddit} } = await addSubreddit({
                     variables: {
@@ -56,7 +57,6 @@ const PostBox = () => {
                     }
                 })
 
-                console.log("Creating Post...", formData)
                 const image = formData.postImage || ""
 
                 const {data: {insertPost: newPost}} = await addPost({
