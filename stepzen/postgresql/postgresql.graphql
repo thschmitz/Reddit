@@ -14,6 +14,25 @@ type Post {
   subreddit_id: ID
   title: String
   username: String
+  #comments
+  comments: [Comment]
+    @materializer(
+      query: "getCommentByPostId",
+      arguments: [{name: "post_id", field: "id"}]
+    )
+  #votes
+  votes: [Vote]
+    @materializer(
+      query: "getVotesByPostId",
+      arguments: [{name: "post_id", field: "id"}]
+  )
+
+  subreddit: [Subreddit]
+    @materializer(
+      query: "getSubredditListById",
+      arguments: [{name: "id", field: "subreddit_id"}]
+    )
+
 }
 
 type Subreddit {
@@ -37,9 +56,29 @@ type Query {
       table: "comment"
       configuration: "postgresql_config"
     )
+
+  getVotesByPostId(post_id: ID!): [Vote]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "vote" where "post_id" = $1 order by "created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
+
+  getSubredditListById(id: ID!): [Subreddit]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "subreddit" where "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+
   """
   This query is an example of how to simply paginate your responses.
   """
+
   getPaginatedCommentList(first: Int!, after: Int!): [Comment]
     @dbquery(
       type: "postgresql"
@@ -48,11 +87,13 @@ type Query {
       """
       configuration: "postgresql_config"
     )
+
   """
   In this example, a single query parameter is passed. If the request to the DB will
   return at most one value you can remove the square brackets from the result.
   """
-  getCommentByPost_id(post_id: ID!): [Comment]
+
+  getCommentByPostId(post_id: ID!): [Comment]
     @dbquery(
       type: "postgresql"
       query: """
@@ -60,10 +101,13 @@ type Query {
       """
       configuration: "postgresql_config"
     )
+
   """
   In this example, two query parameters are passed. If the request to the DB will
   return at most one value you can remove the square brackets from the result.
   """
+
+
   getCommentByPost_idAndUsername(post_id: ID!, username: String!): [Comment]
     @dbquery(
       type: "postgresql"

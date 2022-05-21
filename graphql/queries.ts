@@ -10,13 +10,35 @@ export const GET_SUBREDDIT_BY_TOPIC = gql`
     }
 `
 
-
-export const ADD_SUBREDDIT = gql`
-    mutation MyMutation($topic: String!) {
-        insertSubreddit(topic: $topic) {
-            id
-            topic
+export const GET_ALL_POSTS = gql`
+    query MyQuery{
+        getPostList {
+            body
             created_at
+            id
+            image
+            title
+            username
+            subreddit_id
+            comments{
+                created_at
+                id
+                post_id
+                text
+                username
+            }
+            votes{
+                created_at
+                id
+                post_id
+                upvote
+                username
+            }
+            subreddit {
+                created_at
+                id
+                topic
+            }
         }
     }
 `
