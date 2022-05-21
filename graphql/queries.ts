@@ -13,7 +13,7 @@ export const GET_SUBREDDIT_BY_TOPIC = gql`
 
 export const ADD_SUBREDDIT = gql`
     mutation MyMutation($topic: String!) {
-        insertReddit($topic: $topic) {
+        insertReddit(topic: $topic) {
             id
             topic
             created_at

@@ -59,7 +59,7 @@ const PostBox = () => {
                 console.log("Creating Post...", formData)
                 const image = formData.postImage || ""
 
-                const {data: {insertPost: newPost}} =  await addPost({
+                const {data: {insertPost: newPost}} = await addPost({
                     variables: {
                         body: formData.postBody,
                         image: image,
