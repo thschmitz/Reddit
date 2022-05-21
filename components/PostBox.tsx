@@ -5,6 +5,9 @@ import {LinkIcon, PhotographIcon} from "@heroicons/react/outline"
 import {useForm} from "react-hook-form"
 import { ADD_POST } from '../graphql/mutations'
 import {useMutation} from "@apollo/client"
+import client from "../apollo-client"
+import { ADD_SUBREDDIT, GET_SUBREDDIT_BY_TOPIC } from '../graphql/queries'
+import toast from 'react-hot-toast'
 
 type FormData= {
     postTitle: string,
@@ -16,6 +19,7 @@ type FormData= {
 const PostBox = () => {
     const {data:session} = useSession();
     const [addPost] = useMutation(ADD_POST)
+    const [addSubreddit] = useMutation(ADD_SUBREDDIT)
     const [imageBoxOpen, setImageBoxOpen] = useState<boolean>(false)
     const {
         register,
@@ -26,7 +30,83 @@ const PostBox = () => {
     } = useForm<FormData>()
 
     const onSubmit = handleSubmit( async(formData) => {
-        console.log(formData)
+
+        const notification = toast.loading("Creating new Post...");
+
+        try{
+            // Query for the subreddit topic.
+
+            const {data: {getSubredditListByTopic}} = await client.query({
+                query: GET_SUBREDDIT_BY_TOPIC,
+                variables: {
+                    topic: formData.subreddit
+                }
+            })
+
+            const subredditExists = getSubredditListByTopic.length > 0;
+
+            if(!subredditExists) {
+                // create subreddit
+
+                console.log("Subreddit in me! Creating a new subreddit!")
+
+                const {data: { insertSubreddit: newSubreddit} } = await addSubreddit({
+                    variables: {
+                        topic: formData.subreddit
+                    }
+                })
+
+                console.log("Creating Post...", formData)
+                const image = formData.postImage || ""
+
+                const {data: {insertPost: newPost}} =  await addPost({
+                    variables: {
+                        body: formData.postBody,
+                        image: image,
+                        subreddit_id: newSubreddit.id,
+                        title: formData.postTitle,
+                        username: session?.user?.name,
+                    }
+                })
+
+                console.log("New Post Added: ", newPost)
+            } else {
+                // use another subreddit
+
+                console.log("Using existing subreddit!")
+                console.log(getSubredditListByTopic)
+
+                const image = formData.postImage || ""
+
+                const {data: {insertPost: newPost}} = await addPost({
+                    variables: {
+                        body: formData.postBody,
+                        image: image,
+                        subreddit_id: getSubredditListByTopic[0].id,
+                        title: formData.postTitle,
+                        username: session?.user?.name
+                    }
+                })
+
+                console.log("New post added: ", newPost)
+            }
+
+            // After the post has been added!
+
+            setValue("postBody", "")
+            setValue("postTitle", "")
+            setValue("postImage", "")
+            setValue("subreddit", "")
+
+            toast.success("New Post Created", {
+                id: notification
+            })
+
+        } catch(error) {
+            toast.error("Whoops something went wrong", {
+                id: notification
+            })
+        }
     })
 
     return (
