@@ -137,6 +137,17 @@ type Query {
       """
       configuration: "postgresql_config"
     )
+
+
+  getPostListByPostId(post_id: ID!) : Post
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "post"
+      where "post"."id" = $1
+      """
+      configuration: "postgresql_config"
+    )
   getSubredditList: [Subreddit]
     @dbquery(
       type: "postgresql"

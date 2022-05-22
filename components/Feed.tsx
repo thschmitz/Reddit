@@ -2,7 +2,7 @@ import React from 'react'
 import { GET_ALL_POSTS, GET_ALL_POSTS_BY_TOPIC } from '../graphql/queries'
 import {useQuery} from "@apollo/client"
 import Post from "./Post"
-import {TailSpin} from "react-loader-spinner"
+import {Jelly} from "@uiball/loaders"
 
 type Props = {
   topic: string,
@@ -21,14 +21,15 @@ const Feed = ({topic}: Props) => {
     <div className="mt-5 space-y-4">
       {
         posts? 
-        posts?.map((post) => (
-          <Post key={post.id} post={post}/>
-        ))
+          posts?.map((post) => (
+            <Post key={post.id} post={post}/>
+          ))
         :
-        <div>
-          <TailSpin height="100" width="100" color="gray" ariaLabel="loading" />
+        <div className="flex w-full items-center justify-center p-10 text-xl">
+          <Jelly size={50} color="#ff4501"/>
         </div>
       }
+
 
     </div>
 

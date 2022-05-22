@@ -121,7 +121,7 @@ const PostBox = ({subreddit}: Props) => {
     })
 
     return (
-        <form onSubmit={onSubmit} className="sticky top-16 z-50 rounded-md border border-gray-300 bg-white p-2">
+        <form onSubmit={onSubmit} className="sticky top-20 z-50 rounded-md border border-gray-300 bg-white p-2">
             <div className="flex items-center space-x-3">
                 <Avatar/>
                 <input {...register("postTitle", {required:true})} disabled={!session} className="rounded-md flex-1 bg-gray-50 p-2 pl-5 outline-none" type="text" placeholder={session? subreddit ? `Create a post with r/${subreddit}` : "Create a post by entering a title!" : "Sign in to post!" }/>
