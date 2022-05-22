@@ -1,4 +1,4 @@
-import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid'
+import { ArrowDownIcon, ArrowUpIcon, BookmarkIcon, ChatAltIcon, GiftIcon, ShareIcon, DotsHorizontalIcon } from '@heroicons/react/solid'
 import React from 'react'
 import Avatar from './Avatar'
 import TimeAgo from "react-timeago"
@@ -35,7 +35,32 @@ const Post = ({post}: Props) => {
 
             {/*Image*/}
 
+            <img className="w-full" src={post.image} alt="" /> 
+
             {/*Footer*/}
+
+            <div className="flex space-x-4 text-gray-400">
+              <div className="postButtons">
+                <ChatAltIcon className="h-6 w-6"></ChatAltIcon>
+                <p className="hidden sm:inline">{post.comments.length} Comments</p>
+                <p className="inline sm:hidden">{post.comments.length}</p>
+              </div>
+              <div className="postButtons">
+                <GiftIcon className="h-6 w-6"></GiftIcon>
+                <p className="hidden sm:inline">Award</p>
+              </div>              
+              <div className="postButtons">
+                <ShareIcon className="h-6 w-6"></ShareIcon>
+                <p className="hidden sm:inline">{post.comments.length} Comments</p>
+              </div>              
+              <div className="postButtons">
+                <BookmarkIcon className="h-6 w-6"></BookmarkIcon>
+                <p className="hidden sm:inline">{post.comments.length} Comments</p>
+              </div>              
+              <div className="postButtons">
+                <DotsHorizontalIcon className="h-6 w-6"></DotsHorizontalIcon>
+              </div>
+            </div>
         </div>
     </div>
   )
