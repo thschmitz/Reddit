@@ -36,7 +36,8 @@ const Post = ({post}: Props) => {
                       r/{post.subreddit[0]?.topic}
                     </span>  
                   </Link>
-                  - Posted by u/{post.username} <TimeAgo date={post.created_at} />
+                  {" "}
+                  • Posted by u/{post.username} <TimeAgo date={post.created_at} />
                 </p>
               </div>
               {/*Body*/}
