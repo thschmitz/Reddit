@@ -2,6 +2,7 @@ import React from 'react'
 import { GET_ALL_POSTS, GET_ALL_POSTS_BY_TOPIC } from '../graphql/queries'
 import {useQuery} from "@apollo/client"
 import Post from "./Post"
+import {TailSpin} from "react-loader-spinner"
 
 type Props = {
   topic: string,
@@ -18,9 +19,17 @@ const Feed = ({topic}: Props) => {
 
   return (
     <div className="mt-5 space-y-4">
-      {posts?.map((post) => (
-        <Post key={post.id} post={post}/>
-      ))}
+      {
+        posts? 
+        posts?.map((post) => (
+          <Post key={post.id} post={post}/>
+        ))
+        :
+        <div>
+          <TailSpin height="100" width="100" color="gray" ariaLabel="loading" />
+        </div>
+      }
+
     </div>
 
   )
