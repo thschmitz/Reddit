@@ -10,6 +10,16 @@ export const GET_SUBREDDIT_BY_TOPIC = gql`
     }
 `
 
+export const GET_SUBREDDITS_WITH_LIMIT = gql`
+    query MyQuery($limit: Int!) {
+        getSubredditListLimit(limit: $limit) {
+            id
+            topic
+            created_at
+        }
+    }
+`
+
 export const GET_ALL_VOTES_BY_POST_ID = gql`
     query MyQuery($post_id: ID!) {
         getVotesByPostId(post_id: $post_id) {

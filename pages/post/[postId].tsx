@@ -75,7 +75,7 @@ function PostPage(){
                     <p className="text-sm">Comment as <span className="text-red-500">{session?.user?.name}</span></p>
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-2"> {/*Another way to do the same thing as the first try */}
                         <textarea {...register('comment')} disabled={!session} className="h-24 rounded-md border border-gray-200 p-2 pl-4 outline-none disabled:bg-gray-50" placeholder={session? "What are your thoughts" : "Please sign in to comment"}/>
-                        <button type="submit" className="rounded-full bg-red-500 p-3 font-semibold text-white disabled:bg-gray-200">Comment</button>
+                        <button disabled={!session} type="submit" className="rounded-full bg-red-500 p-3 font-semibold text-white disabled:bg-gray-200">Comment</button>
                     </form>
                 </div>
                 <div className="-my-5 rounded-b-md border border-t-0 border-gray-300 bg-white py-5 px-10">
