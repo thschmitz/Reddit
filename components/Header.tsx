@@ -1,24 +1,45 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from "next/image"
 import {MenuIcon, ChevronDownIcon, HomeIcon, SearchIcon} from "@heroicons/react/solid"
 import {StarIcon, BellIcon, ChatIcon, GlobeIcon, PlusIcon, SparklesIcon, SpeakerphoneIcon, VideoCameraIcon} from "@heroicons/react/outline"
 import {signIn, signOut, useSession } from 'next-auth/react'
 import Link from "next/link"
-import {useQuery} from "@apollo/client"
+import {useQuery, useMutation} from "@apollo/client"
 import { GET_ALL_USERS } from '../graphql/queries'
+import { ADD_USER } from '../graphql/mutations'
 
 const Header = () => {
     const {data: session} = useSession();
 
     const {data, loading} = useQuery(GET_ALL_USERS);
+    const [addUser] = useMutation(ADD_USER);
 
     const users = data?.getUsers;
 
-    users?.map((user: any) => (
-        console.log(user.username)
-    ))
+    const sendUser = () => {
+        if(users){
+            users.map(async(user:any) => {
+                if(user.username === session?.user?.name) {
+                    console.log("user already exists")
+                    return;
+                } else{
+                    addUser({
+                        variables: {
+                            username: session?.user?.name,
+                        }
+                    })
+                }
+    
+            })
+        }
 
-    console.log("users : ", users)
+    }
+        
+    useEffect(() => {
+        if(!session) return;
+        sendUser()   
+    }, [session])
+
     return (
             <div className="sticky top-0 z-50 flex bg-white px-4 py-2 shadow-sm items-center">
                 <div className="relative h-10 w-20 flex-shrink-0 cursor-pointer">
@@ -36,7 +57,9 @@ const Header = () => {
                 <form className="flex flex-1 items-center space-x-2 border-gray-200 border rounded-sm bg-gray-100 px-3 py-1">
                     <SearchIcon className="h-6 w-6 text-gray-400"/>
                     <input type="text" placeholder="Search Reddit" className="flex-1 bg-transparent outline-none" />
-                    <button type="submit" hidden />
+                    <Link href="/search/">
+                        <button type="submit" hidden />
+                    </Link>
                 </form>
 
                 <div className="items-center space-x-2 text-gray-500 mx-5 hidden lg:inline-flex">

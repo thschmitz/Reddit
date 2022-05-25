@@ -10,7 +10,6 @@ type User {
   created_at: DateTime
   id: ID!
   username: String
-  email: String
 }
 
 type Post {
@@ -238,7 +237,7 @@ type Mutation {
       configuration: "postgresql_config"
     )
   
-  insertUser(username: String!, email: String!): User
+  insertUser(username: String!) : User
     @dbquery(
       type: "postgresql"
       table: "users"
