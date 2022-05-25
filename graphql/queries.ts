@@ -23,13 +23,32 @@ export const GET_ALL_USERS = gql `
 export const GET_ALL_POST_WITH_SEARCH = gql `
     query MyQuery($search: String!){
         getPostBySearch(search: $search) {
+            body
             created_at
             id
-            username
-            body
             image
-            subreddit_id
             title
+            username
+            subreddit_id
+            comments{
+                created_at
+                id
+                post_id
+                text
+                username
+            }
+            votes{
+                created_at
+                id
+                post_id
+                upvote
+                username
+            }
+            subreddit {
+                created_at
+                id
+                topic
+            }
         }
     }
 `

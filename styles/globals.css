@@ -14,4 +14,9 @@
     .postButtons{
         @apply flex items-center space-x-1 text-sm font-semibold p-2 hover:bg-gray-100 cursor-pointer rounded-sm
     }
+
+    .optionButtons{
+        @apply bg-white rounded-lg p-3 items-center mr-10
+    }
 }
+

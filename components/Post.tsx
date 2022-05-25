@@ -95,7 +95,7 @@ const Post = ({post}: Props) => {
           <div className="p-3 pb-1">
               {/*Header*/}
               <div className="items-center space-x-2 flex">
-                <Avatar seed={post.subreddit[0]?.topic} /> {/* subreddit[0] because it returns an array with the info*/}
+                <Avatar seed={post?.subreddit[0]?.topic} /> {/* subreddit[0] because it returns an array with the info*/}
                 <p className="text-xs text-gray-400">
                   <Link href={`/subreddit/${post.subreddit[0]?.topic}`}>
                     <span className="text-black font-bold hover:text-blue-400 hover:underline">
