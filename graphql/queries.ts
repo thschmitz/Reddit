@@ -10,6 +10,16 @@ export const GET_SUBREDDIT_BY_TOPIC = gql`
     }
 `
 
+export const GET_ALL_USERS = gql `
+    query MyQuery{
+        getUsers {
+            id
+            username
+            created_at
+        }
+    }
+`
+
 export const GET_SUBREDDITS_WITH_LIMIT = gql`
     query MyQuery($limit: Int!) {
         getSubredditListLimit(limit: $limit) {

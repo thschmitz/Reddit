@@ -19,7 +19,6 @@ const Feed = ({topic}: Props) => {
 
   const posts: Post[] = !topic? data?.getPostList : data?.getPostListByTopic;
 
-  console.log(error)
 
   const {data: subredditData} = useQuery(GET_SUBREDDITS_WITH_LIMIT, {
     variables: {
@@ -28,7 +27,6 @@ const Feed = ({topic}: Props) => {
   })
 
   const subreddits: Subreddit[] = subredditData?.getSubredditListLimit;
-  console.log(subreddits)
 
   return (
     <div className="mt-5 space-y-4">

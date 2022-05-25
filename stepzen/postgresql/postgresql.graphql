@@ -6,6 +6,13 @@ type Comment {
   username: String
 }
 
+type User {
+  created_at: DateTime
+  id: ID!
+  username: String
+  email: String
+}
+
 type Post {
   body: String
   created_at: DateTime
@@ -72,6 +79,13 @@ type Query {
       query: """
       select * from "subreddit" where "id" = $1
       """
+      configuration: "postgresql_config"
+    )
+  
+  getUsers: [User]
+    @dbquery(
+      type: "postgresql"
+      table: "users"
       configuration: "postgresql_config"
     )
 
@@ -220,6 +234,14 @@ type Mutation {
     @dbquery(
       type: "postgresql"
       table: "vote"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  
+  insertUser(username: String!, email: String!): User
+    @dbquery(
+      type: "postgresql"
+      table: "users"
       dml: INSERT
       configuration: "postgresql_config"
     )

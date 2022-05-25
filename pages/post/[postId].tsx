@@ -44,7 +44,6 @@ function PostPage(){
 
     const onSubmit:SubmitHandler<FormData> = async(data) => {
         // postComment here!
-        console.log(data)
         const notification = toast.loading("Posting your comment...")
         
         await addComment({
@@ -62,9 +61,6 @@ function PostPage(){
             id: notification,
         })
     }
-
-    console.log(data)
-
 
     return (
         <div className="mx-auto my-7 max-w-5xl">
