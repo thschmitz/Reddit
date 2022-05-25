@@ -20,6 +20,20 @@ export const GET_ALL_USERS = gql `
     }
 `
 
+export const GET_ALL_POST_WITH_SEARCH = gql `
+    query MyQuery($search: String!){
+        getPostBySearch(search: $search) {
+            created_at
+            id
+            username
+            body
+            image
+            subreddit_id
+            title
+        }
+    }
+`
+
 export const GET_SUBREDDITS_WITH_LIMIT = gql`
     query MyQuery($limit: Int!) {
         getSubredditListLimit(limit: $limit) {

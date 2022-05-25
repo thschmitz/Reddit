@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image"
 import {MenuIcon, ChevronDownIcon, HomeIcon, SearchIcon} from "@heroicons/react/solid"
 import {StarIcon, BellIcon, ChatIcon, GlobeIcon, PlusIcon, SparklesIcon, SpeakerphoneIcon, VideoCameraIcon} from "@heroicons/react/outline"
@@ -10,8 +10,8 @@ import { ADD_USER } from '../graphql/mutations'
 
 const Header = () => {
     const {data: session} = useSession();
-
     const {data, loading} = useQuery(GET_ALL_USERS);
+    const [search, setSearch] = useState("")
     const [addUser] = useMutation(ADD_USER);
 
     const users = data?.getUsers;
@@ -33,6 +33,10 @@ const Header = () => {
             })
         }
 
+    }
+
+    const handleTyping = () => {
+        setSearch(event?.target?.value);
     }
         
     useEffect(() => {
@@ -56,9 +60,9 @@ const Header = () => {
 
                 <form className="flex flex-1 items-center space-x-2 border-gray-200 border rounded-sm bg-gray-100 px-3 py-1">
                     <SearchIcon className="h-6 w-6 text-gray-400"/>
-                    <input type="text" placeholder="Search Reddit" className="flex-1 bg-transparent outline-none" />
-                    <Link href="/search/">
-                        <button type="submit" hidden />
+                    <input type="text" placeholder="Search Reddit" onChange={handleTyping} className="flex-1 bg-transparent outline-none" />
+                    <Link href={`/search/${search}`}>
+                        <button type="submit" hidden/>
                     </Link>
                 </form>
 
