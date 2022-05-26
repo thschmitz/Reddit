@@ -16,7 +16,7 @@
     }
 
     .optionButtons{
-        @apply bg-white rounded-lg p-3 items-center mr-10
+        @apply bg-white rounded-lg p-3 cursor-pointer items-center mr-10 hover:bg-red-400 hover:text-white
     }
 }
 

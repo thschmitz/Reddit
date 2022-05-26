@@ -1,4 +1,4 @@
-import { ArrowDownIcon, ArrowUpIcon, BookmarkIcon, ChatAltIcon, GiftIcon, ShareIcon, DotsHorizontalIcon } from '@heroicons/react/solid'
+import { ArrowDownIcon, ArrowUpIcon, BookmarkIcon, ChatAltIcon, GiftIcon, ShareIcon, DotsHorizontalIcon, DotsVerticalIcon } from '@heroicons/react/solid'
 import React, {useEffect, useState} from 'react'
 import Avatar from './Avatar'
 import TimeAgo from "react-timeago"
@@ -9,6 +9,9 @@ import toast from 'react-hot-toast'
 import { GET_ALL_VOTES_BY_POST_ID } from '../graphql/queries'
 import {useQuery, useMutation} from "@apollo/client"
 import {ADD_VOTE} from "../graphql/mutations"
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 type Props = {
     post: Post
@@ -17,6 +20,15 @@ type Props = {
 const Post = ({post}: Props) => {
   const [vote, setVote] = useState<boolean>()
   const {data:session} = useSession()
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const {data, loading, error} = useQuery(GET_ALL_VOTES_BY_POST_ID, {
     variables: {
@@ -82,6 +94,8 @@ const Post = ({post}: Props) => {
     </div>
   )
 
+  console.log(post)
+
   return (
     <Link href={`/post/${post.id}`}>
       <div className="flex rounded-md cursor-pointer border border-gray-300 bg-white shadow-sm hover:border hover:border-gray-600">
@@ -97,13 +111,15 @@ const Post = ({post}: Props) => {
               <div className="items-center space-x-2 flex">
                 <Avatar seed={post?.subreddit[0]?.topic} /> {/* subreddit[0] because it returns an array with the info*/}
                 <p className="text-xs text-gray-400">
+                  
                   <Link href={`/subreddit/${post.subreddit[0]?.topic}`}>
                     <span className="text-black font-bold hover:text-blue-400 hover:underline">
                       r/{post.subreddit[0]?.topic}
                     </span>  
                   </Link>
                   {" "}
-                  • Posted by u/{post.username} <TimeAgo date={post.created_at} />
+                    • Posted by u/{post.username} <TimeAgo date={post.created_at} />
+                  
                 </p>
               </div>
               {/*Body*/}
@@ -138,7 +154,38 @@ const Post = ({post}: Props) => {
                   <p className="hidden sm:inline">Marks</p>
                 </div>              
                 <div className="postButtons">
-                  <DotsHorizontalIcon className="h-6 w-6"></DotsHorizontalIcon>
+                <Button
+                  id="basic-button"
+                  aria-controls={open ? 'basic-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={handleClick}
+                >
+                  <DotsHorizontalIcon className="h-6 w-6 text-gray-400"></DotsHorizontalIcon>
+                </Button>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
+                >
+                  {
+                    session?.user?.name === post.username ?
+                      <div>
+                        <MenuItem onClick={handleClose}>Delete Post</MenuItem>
+                        <MenuItem onClick={handleClose}>Edit Post</MenuItem>
+                      </div>
+                      
+                    :
+                      <MenuItem onClick={handleClose}>Edit Post</MenuItem>
+
+                  }
+
+                </Menu>
+                  
                 </div>
               </div>
           </div>

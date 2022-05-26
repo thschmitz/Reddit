@@ -35,11 +35,11 @@ const searchMsg = () => {
     return (
         <div className="mt-5 space-y-4 mx-auto my-7 max-w-5xl">
                 <div className="flex-1 flex ">
-                    <div className="bg-white rounded-lg p-3 items-center mr-10 cursor-pointer hover:bg-red-400 ">
-                        <p>Opcao 01</p>
+                    <div className="optionButtons">
+                        <button>Posts</button>
                     </div>
-                    <div>
-                        <p>Opcao 02</p>
+                    <div className="optionButtons">
+                        <button>Users</button>
                     </div>
                 </div>
             {
