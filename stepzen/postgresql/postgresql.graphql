@@ -259,19 +259,40 @@ type Mutation {
   """
   In this mutation example you can see how to do a mutation to delete data from the database.
   """
-  deletePost(
-    image: String!
-    id: ID!
-    body: String!
-    created_at: DateTime!
-    subreddit_id: ID!
-    title: String!
-    username: String!
-  ): Post
+  deleteComment(
+    post_id: ID!
+
+  ): Comment
+    @dbquery(
+      type: "postgresql"
+      table: "comment"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+
+  deleteVote(post_id: ID!): Vote
+    @dbquery(
+      type: "postgresql"
+      table: "vote"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  
+  deletePost(id: ID!): Post
     @dbquery(
       type: "postgresql"
       table: "post"
       dml: DELETE
       configuration: "postgresql_config"
     )
+  
+  putPost(id: ID!, image: String!, body: String!, subreddit_id: ID!, title: String!): Post
+    @dbquery(
+      type: "postgresql"
+      table: "post"
+      dml: PUT
+      configuration: "postgresql_config"
+    )
+
+  
 }

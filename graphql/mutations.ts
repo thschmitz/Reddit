@@ -22,6 +22,37 @@ export const ADD_USER = gql`
     }
 `
 
+export const DELETE_COMMENT = gql`
+    mutation MyMutation($id: ID!){
+        deleteComment(post_id: $id){
+            id
+            text
+            username
+        }
+    }
+`
+
+export const DELETE_VOTE = gql`
+    mutation MyMutation($id: ID!){
+        deleteVote(post_id: $id){
+            id
+            post_id
+            username
+        }
+    }
+`
+
+export const DELETE_POST = gql`
+    mutation MyMutation($id: ID!){
+        deletePost(id: $id){
+            id
+            title
+            body
+            username
+        }
+    }
+`
+
 export const ADD_VOTE = gql`
     mutation MyMutation($post_id: ID!, $username: String!, $upvote:Boolean!) {
         insertVote(post_id: $post_id, username: $username, upvote: $upvote) {

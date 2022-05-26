@@ -6,7 +6,8 @@ import Link from "next/link"
 import {Jelly} from "@uiball/loaders"
 import { useSession } from 'next-auth/react'
 import toast from 'react-hot-toast'
-import { GET_ALL_VOTES_BY_POST_ID } from '../graphql/queries'
+import { GET_ALL_VOTES_BY_POST_ID, GET_ALL_POSTS } from '../graphql/queries'
+import {DELETE_COMMENT, DELETE_POST, DELETE_VOTE} from "../graphql/mutations"
 import {useQuery, useMutation} from "@apollo/client"
 import {ADD_VOTE} from "../graphql/mutations"
 import Button from '@mui/material/Button';
@@ -20,6 +21,27 @@ type Props = {
 const Post = ({post}: Props) => {
   const [vote, setVote] = useState<boolean>()
   const {data:session} = useSession()
+  console.log(post?.id)
+  const [deleteComment] = useMutation(DELETE_COMMENT, {
+    variables: {
+      id: post?.id
+    }
+  })
+
+  const [deleteVote] = useMutation(DELETE_VOTE, {
+    variables: {
+      id: post?.id
+    }
+  })
+
+  const [deletePost] = useMutation(DELETE_POST, {
+    refetchQueries: [
+      GET_ALL_POSTS, "getPostList"
+    ],
+    variables: {
+      id: post?.id
+    }
+  })
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -29,6 +51,13 @@ const Post = ({post}: Props) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleDeletePost = () => {
+    deleteVote()
+    deleteComment()
+    deletePost()
+    handleClose()
+  }
 
   const {data, loading, error} = useQuery(GET_ALL_VOTES_BY_POST_ID, {
     variables: {
@@ -175,7 +204,7 @@ const Post = ({post}: Props) => {
                   {
                     session?.user?.name === post.username ?
                       <div>
-                        <MenuItem onClick={handleClose}>Delete Post</MenuItem>
+                        <Link href="/"><MenuItem onClick={handleDeletePost}>Delete Post</MenuItem></Link>
                         <MenuItem onClick={handleClose}>Edit Post</MenuItem>
                       </div>
                       
