@@ -12,22 +12,29 @@ const Header = () => {
     const {data: session} = useSession();
     const {data, loading} = useQuery(GET_ALL_USERS);
     const [search, setSearch] = useState("")
+    const [exists, setExists] = useState(false)
     const [addUser] = useMutation(ADD_USER);
 
     const users = data?.getUsers;
 
     const sendUser = () => {
         if(users){
-            users.map(async(user:any) => {
-                if(user.username === session?.user?.name) {
+            users.map((user:any) => {
+                if(user?.username === session?.user?.name) {
                     console.log("user already exists")
+                    setExists(true)
                     return;
-                } else{
-                    addUser({
-                        variables: {
-                            username: session?.user?.name,
-                        }
-                    })
+                } else if(user?.username !== session?.user?.name) {
+                    if(exists === false){
+                        addUser({
+                            variables: {
+                                username: session?.user?.name,
+                            }
+                        })
+                        console.log("Adicionado")
+                        setExists(true)
+                    }
+                    return
                 }
     
             })

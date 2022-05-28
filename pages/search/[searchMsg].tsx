@@ -98,7 +98,7 @@ const searchMsg = () => {
                         <Jelly size={50} color="#ff4501"/>
                     </div>
                 :
-                <div className="flex w-full items-center justify-center p-10 text-xl">
+                <div className="w-full items-center justify-center p-10 text-xl">
                     {
                         loadingUsers?
                         <div className="flex w-full items-center justify-center p-10 text-xl">

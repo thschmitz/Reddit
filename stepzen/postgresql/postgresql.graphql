@@ -102,6 +102,16 @@ type Query {
       type: "postgresql"
       query: """
       select * from "post" where "username" = $1
+      order by "created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
+  
+  getIdByUsername(username: String!): User
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "users" where "username" = $1
       """
       configuration: "postgresql_config"
     )

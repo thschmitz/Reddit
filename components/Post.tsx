@@ -6,7 +6,7 @@ import Link from "next/link"
 import {Jelly} from "@uiball/loaders"
 import { useSession } from 'next-auth/react'
 import toast from 'react-hot-toast'
-import { GET_ALL_VOTES_BY_POST_ID, GET_ALL_POSTS } from '../graphql/queries'
+import { GET_ALL_VOTES_BY_POST_ID, GET_ALL_POSTS, GET_ID_BY_USERNAME } from '../graphql/queries'
 import {DELETE_COMMENT, DELETE_POST, DELETE_VOTE} from "../graphql/mutations"
 import {useQuery, useMutation} from "@apollo/client"
 import {ADD_VOTE} from "../graphql/mutations"
@@ -64,6 +64,13 @@ const Post = ({post}: Props) => {
     }
   })
 
+  const {data: dataId, loading: loadingId, error: errorId} = useQuery(GET_ID_BY_USERNAME, {
+    variables:{
+        username: post?.username
+    }
+  })
+
+  const id = dataId?.getIdByUsername?.id;
 
   const [addVote] = useMutation(ADD_VOTE, {
     refetchQueries: [GET_ALL_VOTES_BY_POST_ID, "getVotesByPostId"]
@@ -144,7 +151,7 @@ const Post = ({post}: Props) => {
                     </span>  
                   </Link>
                   {" "}
-                    • Posted by u/{post.username} <TimeAgo date={post.created_at} />
+                  • Posted by <Link href={`/user/${id}`}><a className="hover:text-blue-400 hover:underline">u/{post.username}</a></Link> <TimeAgo date={post.created_at} />  
                   
                 </p>
               </div>

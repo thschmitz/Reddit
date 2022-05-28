@@ -53,6 +53,14 @@ export const GET_POST_BY_USERNAME = gql`
     }
 `
 
+export const GET_ID_BY_USERNAME = gql`
+    query MyQuery($username: String!){
+        getIdByUsername(username: $username){
+            id
+        }
+    }
+`
+
 export const GET_USER_BY_ID = gql`
     query MyQuery($id: ID!){
         getUserById(id: $id){

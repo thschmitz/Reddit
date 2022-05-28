@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {useRouter} from "next/router"
-import { GET_USER_BY_ID, GET_POST_BY_USERNAME } from '../../graphql/queries';
+import { GET_USER_BY_ID, GET_POST_BY_USERNAME, GET_ID_BY_USERNAME } from '../../graphql/queries';
 import { useQuery } from '@apollo/client';
 import Avatar from '../../components/Avatar'
 import { Jelly } from '@uiball/loaders';
@@ -25,6 +25,8 @@ const searchMsg = () => {
         }
     })
 
+
+
     const posts: Post[] = post?.getPostByUsername;
 
     console.log("post: ", post)
@@ -43,7 +45,7 @@ const searchMsg = () => {
                             </div>
                             <div className="py-2">
                                 <h1 className="text-3xl font-semibold">Welcome to the r/{user?.username} Profile</h1>
-                                <p>{createdHour}</p>
+                                <p><span className="dateCreated">Created Time: </span>{createdHour}<span className="dateCreated"> GMT</span></p>
                             </div>
                         </div>
                     </div>

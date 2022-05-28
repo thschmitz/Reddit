@@ -12,11 +12,11 @@ const User = ({user}: Props) => {
 
     return (
         <Link href={`/user/${user.id}`}>
-            <div className="bg-white flex flex-1 p-5 cursor-pointer rounded-lg hover:bg-gray-300">
+            <div className="bg-white flex flex-1 p-5 cursor-pointer rounded-lg hover:bg-gray-300 mt-2">
                 <div className="items-center space-x-2 flex">
                     <Avatar seed={user?.username} /> {/* subreddit[0] because it returns an array with the info*/}
                     <div>{user.username}</div>
-                    <p className="pl-10"><span className="text-gray-400 text-sm">Entered in: </span>{data}<span className="text-gray-400 text-sm">GMT</span></p>
+                    <p className="pl-20"><span className="dateCreated">Entered in: </span>{data}<span className="dateCreated">UTC</span></p>
                 </div>
             </div>
         </Link>
