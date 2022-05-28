@@ -4,7 +4,7 @@ import {GET_ALL_POST_WITH_SEARCH} from "../../graphql/queries"
 import {useQuery} from "@apollo/client"
 import Post from "../../components/Post"
 import {Jelly} from "@uiball/loaders"
-import { GET_SUBREDDITS_WITH_LIMIT, GET_ALL_USERS } from '../../graphql/queries'
+import { GET_SUBREDDITS_WITH_LIMIT, GET_ALL_USERS, GET_ALL_USERS_BY_SEARCH } from '../../graphql/queries'
 import SubredditRow from "../../components/SubredditRow"
 import User from "../../components/User"
 
@@ -20,10 +20,15 @@ const searchMsg = () => {
         }
     })
 
-    const {data: dataUsers, loading: loadingUsers, error: errorUsers} = useQuery(GET_ALL_USERS)
+    const {data: dataUsers, loading: loadingUsers, error: errorUsers} = useQuery(GET_ALL_USERS_BY_SEARCH, {
+        variables:{
+            search: router.query.searchMsg
+        }
+    })
+
 
     const posts: Post[] = data?.getPostBySearch;
-    const users = dataUsers?.getUsers;
+    const users = dataUsers?.getUsersBySearch;
 
     const {data: subredditData} = useQuery(GET_SUBREDDITS_WITH_LIMIT, {
         variables: {
@@ -78,7 +83,7 @@ const searchMsg = () => {
                 
                     posts? 
                     <div className="flex-1 flex">
-                        <div className="mt-10">
+                        <div>
                             {
                                 posts?.map((post) => (
                                 <Post key={post.id} post={post}/>
@@ -86,7 +91,7 @@ const searchMsg = () => {
                             }
                         </div>  
                         
-                        <div className="sticky top-36 mx-5 hidden h-fit min-w-[300px] rounded-md border border-gray-300 bg-white lg:inline">
+                        <div className="sticky top-40 mx-5 hidden h-fit min-w-[300px] rounded-md border border-gray-300 bg-white lg:inline">
                             <p className="text-md mb-1 p-4 pb-3 font-bold">Top Communities</p>
                             {subreddits?.map((subreddit, i) => (
                                 <SubredditRow topic={subreddit.topic} index={i} key={subreddit.id}/>

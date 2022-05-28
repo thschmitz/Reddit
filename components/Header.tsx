@@ -5,41 +5,34 @@ import {StarIcon, BellIcon, ChatIcon, GlobeIcon, PlusIcon, SparklesIcon, Speaker
 import {signIn, signOut, useSession } from 'next-auth/react'
 import Link from "next/link"
 import {useQuery, useMutation} from "@apollo/client"
-import { GET_ALL_USERS } from '../graphql/queries'
+import { GET_ALL_USERS, SEARCH_USERNAME } from '../graphql/queries'
 import { ADD_USER } from '../graphql/mutations'
 
 const Header = () => {
     const {data: session} = useSession();
     const {data, loading} = useQuery(GET_ALL_USERS);
     const [search, setSearch] = useState("")
-    const [exists, setExists] = useState(false)
     const [addUser] = useMutation(ADD_USER);
+    const {data: dataUser, loading: loadingUser, error} = useQuery(SEARCH_USERNAME, {
+        variables: {
+            username: session?.user?.name
+        }
+    })
+
 
     const users = data?.getUsers;
+    const CheckUser = dataUser?.searchUsername;
+
 
     const sendUser = () => {
-        if(users){
-            users.map((user:any) => {
-                if(user?.username === session?.user?.name) {
-                    console.log("user already exists")
-                    setExists(true)
-                    return;
-                } else if(user?.username !== session?.user?.name) {
-                    if(exists === false){
-                        addUser({
-                            variables: {
-                                username: session?.user?.name,
-                            }
-                        })
-                        console.log("Adicionado")
-                        setExists(true)
-                    }
-                    return
+        if(CheckUser?.length === 0){
+            console.log("ADICIONADO")
+            addUser({
+                variables: {
+                    username: session?.user?.name
                 }
-    
             })
         }
-
     }
 
     const handleTyping = () => {
@@ -48,7 +41,10 @@ const Header = () => {
         
     useEffect(() => {
         if(!session) return;
-        sendUser()   
+        if(users && session){
+            sendUser()   
+
+        }
     }, [session])
 
     return (

@@ -116,6 +116,26 @@ type Query {
       configuration: "postgresql_config"
     )
 
+  getUsersBySearch(search: String!): [User]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "users" where "username"
+      like '%' || $1 || '%'
+      order by "created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
+
+  searchUsername(username: String!): [User]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "users" where "username" like $1
+      """
+      configuration: "postgresql_config"
+    )
+
   getPostBySearch(search: String!): [Post]
     @dbquery(
       type: "postgresql"

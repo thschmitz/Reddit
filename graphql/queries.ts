@@ -20,6 +20,16 @@ export const GET_ALL_USERS = gql`
     }
 `
 
+export const GET_ALL_USERS_BY_SEARCH = gql`
+    query MyQuery($search: String!){
+        getUsersBySearch(search: $search){
+            id
+            username
+            created_at
+        }
+    }
+`
+
 export const GET_POST_BY_USERNAME = gql`
     query MyQuery($username: String!){
         getPostByUsername(username: $username){
@@ -49,6 +59,16 @@ export const GET_POST_BY_USERNAME = gql`
                 id
                 topic
             }
+        }
+    }
+`
+
+export const SEARCH_USERNAME = gql`
+    query MyQuery($username: String!){
+        searchUsername(username: $username){
+            id
+            username
+            created_at
         }
     }
 `
