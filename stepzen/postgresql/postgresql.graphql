@@ -285,14 +285,6 @@ type Mutation {
       dml: DELETE
       configuration: "postgresql_config"
     )
-  
-  putPost(id: ID!, image: String!, body: String!, subreddit_id: ID!, title: String!): Post
-    @dbquery(
-      type: "postgresql"
-      table: "post"
-      dml: PUT
-      configuration: "postgresql_config"
-    )
 
   
 }
