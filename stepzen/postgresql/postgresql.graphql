@@ -87,6 +87,24 @@ type Query {
       table: "users"
       configuration: "postgresql_config"
     )
+  
+  getUserById(id: ID!): User
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "users" where "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  
+  getPostByUsername(username: String!): [Post]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "post" where "username" = $1
+      """
+      configuration: "postgresql_config"
+    )
 
   getPostBySearch(search: String!): [Post]
     @dbquery(
