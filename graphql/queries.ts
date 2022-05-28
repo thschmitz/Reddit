@@ -20,6 +20,16 @@ export const GET_ALL_USERS = gql`
     }
 `
 
+export const GET_USER_BY_ID = gql`
+    query MyQuery($id: ID!){
+        getUserById(id: $id){
+            id
+            username
+            created_at
+        }
+    }
+`
+
 export const GET_ALL_POST_WITH_SEARCH = gql `
     query MyQuery($search: String!){
         getPostBySearch(search: $search) {
