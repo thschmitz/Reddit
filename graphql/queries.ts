@@ -10,9 +10,9 @@ export const GET_SUBREDDIT_BY_TOPIC = gql`
     }
 `
 
-export const GET_ALL_USERS = gql `
+export const GET_ALL_USERS = gql`
     query MyQuery{
-        getUsers {
+        getUsers{
             id
             username
             created_at

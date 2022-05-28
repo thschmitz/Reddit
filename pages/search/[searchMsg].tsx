@@ -1,14 +1,18 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {useRouter} from "next/router"
 import {GET_ALL_POST_WITH_SEARCH} from "../../graphql/queries"
 import {useQuery} from "@apollo/client"
 import Post from "../../components/Post"
 import {Jelly} from "@uiball/loaders"
-import { GET_SUBREDDITS_WITH_LIMIT } from '../../graphql/queries'
+import { GET_SUBREDDITS_WITH_LIMIT, GET_ALL_USERS } from '../../graphql/queries'
 import SubredditRow from "../../components/SubredditRow"
+import User from "../../components/User"
 
 const searchMsg = () => {
     const router = useRouter();
+
+    const [postButton, setPostButton] = useState(true)
+    const [userButton, setUserButton] = useState(false)
 
     const {data, loading, error} = useQuery(GET_ALL_POST_WITH_SEARCH, {
         variables:{
@@ -16,11 +20,10 @@ const searchMsg = () => {
         }
     })
 
-    const posts: Post[] = data?.getPostBySearch;
+    const {data: dataUsers, loading: loadingUsers, error: errorUsers} = useQuery(GET_ALL_USERS)
 
-    if(posts){
-        console.log("posts: ", posts.length)
-    }
+    const posts: Post[] = data?.getPostBySearch;
+    const users = dataUsers?.getUsers;
 
     const {data: subredditData} = useQuery(GET_SUBREDDITS_WITH_LIMIT, {
         variables: {
@@ -30,46 +33,84 @@ const searchMsg = () => {
     
     const subreddits: Subreddit[] = subredditData?.getSubredditListLimit;
 
-    console.log(subreddits)
+    function handleSubmitPost () {
+        setPostButton(true)
+        setUserButton(false)
+    }
+
+    function handleSubmitUsers () {
+        setPostButton(false)
+        setUserButton(true)
+    }
+
+    console.log("users: ", users)
 
     return (
         <div className="mt-5 space-y-4 mx-auto my-7 max-w-5xl">
-                <div className="flex-1 flex ">
-                    <div className="optionButtons">
-                        <button>Posts</button>
-                    </div>
-                    <div className="optionButtons">
-                        <button>Users</button>
-                    </div>
-                </div>
-            {
-                posts?
-""
-                
-                :
-                ""
-            }
-            {
-                posts? 
-                <div className="flex-1 flex">
-                    <div>
+                <div className="flex w-full items-center justify-center p-3">
                     {
-                        posts?.map((post) => (
-                        <Post key={post.id} post={post}/>
-                        ))
+                        postButton?
+                        <div className="optionButtons bg-red-400 text-white">
+                            <button>Posts</button>
+                        </div>
+                        :
+                        <div className="optionButtons">
+                            <button onClick={handleSubmitPost}>Posts</button>
+                        </div>
                     }
-                    </div>  
-                    
-                    <div className="sticky top-36 mx-5 hidden h-fit min-w-[300px] rounded-md border border-gray-300 bg-white lg:inline">
-                        <p className="text-md mb-1 p-4 pb-3 font-bold">Top Communities</p>
-                        {subreddits?.map((subreddit, i) => (
-                            <SubredditRow topic={subreddit.topic} index={i} key={subreddit.id}/>
-                        ))}
-                    </div>
+                    {
+                        userButton?
+
+                        <div className="optionButtons bg-red-400 text-white">
+                            <button>Users</button>
+                        </div>
+                        :
+                        <div className="optionButtons">
+                            <button onClick={handleSubmitUsers}>Users</button>
+                        </div>
+                    }
+
                 </div>
+
+            {
+                postButton?
+
+                
+                    posts? 
+                    <div className="flex-1 flex">
+                        <div>
+                        {
+                            posts?.map((post) => (
+                            <Post key={post.id} post={post}/>
+                            ))
+                        }
+                        </div>  
+                        
+                        <div className="sticky top-36 mx-5 hidden h-fit min-w-[300px] rounded-md border border-gray-300 bg-white lg:inline">
+                            <p className="text-md mb-1 p-4 pb-3 font-bold">Top Communities</p>
+                            {subreddits?.map((subreddit, i) => (
+                                <SubredditRow topic={subreddit.topic} index={i} key={subreddit.id}/>
+                            ))}
+                        </div>
+                    </div>
+                    :
+                    <div className="flex w-full items-center justify-center p-10 text-xl">
+                    <Jelly size={50} color="#ff4501"/>
+                    </div>
                 :
                 <div className="flex w-full items-center justify-center p-10 text-xl">
-                <Jelly size={50} color="#ff4501"/>
+                    {
+                        loadingUsers?
+                        <div className="flex w-full items-center justify-center p-10 text-xl">
+                            <Jelly size={50} color="#ff4501"/>
+                        </div>
+                        :
+                        users?.map((user: any) => (
+                            <div key={user.id}>
+                                <User user={user} />
+                            </div>
+                        ))
+                    }
                 </div>
             }
         </div>

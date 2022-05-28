@@ -21,7 +21,6 @@ type Props = {
 const Post = ({post}: Props) => {
   const [vote, setVote] = useState<boolean>()
   const {data:session} = useSession()
-  console.log(post?.id)
   const [deleteComment] = useMutation(DELETE_COMMENT, {
     variables: {
       id: post?.id
@@ -122,8 +121,6 @@ const Post = ({post}: Props) => {
       <Jelly size={50} color="#ff4501"/>
     </div>
   )
-
-  console.log(post)
 
   return (
     <Link href={`/post/${post.id}`}>
