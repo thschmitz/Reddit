@@ -78,12 +78,12 @@ const searchMsg = () => {
                 
                     posts? 
                     <div className="flex-1 flex">
-                        <div>
-                        {
-                            posts?.map((post) => (
-                            <Post key={post.id} post={post}/>
-                            ))
-                        }
+                        <div className="mt-10">
+                            {
+                                posts?.map((post) => (
+                                <Post key={post.id} post={post}/>
+                                ))
+                            }
                         </div>  
                         
                         <div className="sticky top-36 mx-5 hidden h-fit min-w-[300px] rounded-md border border-gray-300 bg-white lg:inline">
@@ -95,7 +95,7 @@ const searchMsg = () => {
                     </div>
                     :
                     <div className="flex w-full items-center justify-center p-10 text-xl">
-                    <Jelly size={50} color="#ff4501"/>
+                        <Jelly size={50} color="#ff4501"/>
                     </div>
                 :
                 <div className="flex w-full items-center justify-center p-10 text-xl">

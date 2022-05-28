@@ -20,6 +20,39 @@ export const GET_ALL_USERS = gql`
     }
 `
 
+export const GET_POST_BY_USERNAME = gql`
+    query MyQuery($username: String!){
+        getPostByUsername(username: $username){
+            body
+            created_at
+            id
+            image
+            title
+            username
+            subreddit_id
+            comments{
+                created_at
+                id
+                post_id
+                text
+                username
+            }
+            votes{
+                created_at
+                id
+                post_id
+                upvote
+                username
+            }
+            subreddit {
+                created_at
+                id
+                topic
+            }
+        }
+    }
+`
+
 export const GET_USER_BY_ID = gql`
     query MyQuery($id: ID!){
         getUserById(id: $id){
