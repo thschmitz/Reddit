@@ -6,6 +6,14 @@ type Comment {
   username: String
 }
 
+type Follow{
+  created_at: DateTime
+  id: ID!
+  following_id: ID!
+  username: String!
+  follow: Boolean!
+}
+
 type User {
   created_at: DateTime
   id: ID!
@@ -233,6 +241,15 @@ type Query {
       """
       configuration: "postgresql_config"
     )
+
+  getFollowByUsernameAndId(username: String!, id: ID!): [Follow]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select "follow" from "followers" where "username" = $1 and "following_id" = $2 order by "created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
   getSubredditList: [Subreddit]
     @dbquery(
       type: "postgresql"
@@ -301,6 +318,22 @@ type Mutation {
       type: "postgresql"
       table: "users"
       dml: INSERT
+      configuration: "postgresql_config"
+    )
+
+  insertFollow(username: String!, following_id: ID!, follow: Boolean!): Follow
+    @dbquery(
+      type: "postgresql"
+      table: "followers"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+
+  deleteFollow(username: String!, following_id: ID!): Follow
+    @dbquery(
+      type: "postgresql"
+      table: "followers"
+      dml: DELETE
       configuration: "postgresql_config"
     )
 

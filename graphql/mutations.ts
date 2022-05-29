@@ -42,6 +42,30 @@ export const DELETE_VOTE = gql`
     }
 `
 
+export const INSERT_FOLLOW = gql`
+    mutation MyMutation($username: String!, $following_id: ID!, $follow: Boolean!){
+        insertFollow(username: $username, following_id: $following_id, follow: $follow){
+            id
+            username
+            following_id
+            created_at
+            follow
+        }
+    }
+`
+
+export const DELETE_FOLLOW = gql`
+    mutation MyMutation($username: String!, $following_id: ID!){
+        deleteFollow(username: $username, following_id: $following_id){
+            id
+            username
+            following_id
+            created_at
+            follow
+        }
+    }
+`
+
 export const DELETE_POST = gql`
     mutation MyMutation($id: ID!){
         deletePost(id: $id){
