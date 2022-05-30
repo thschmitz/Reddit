@@ -188,6 +188,16 @@ export const GET_FOLLOW_BY_USERNAME_AND_ID = gql`
     }
 `
 
+export const GET_FOLLOWING_BY_USERNAME = gql`
+    query MyQuery($username: String!){
+        getFollowing(username: $username) {
+            id
+            username
+            created_at
+        }
+    }
+`
+
 export const GET_ALL_FOLLOWERS = gql`
     query MyQuery($following_id: ID!){
         getFollowers(following_id: $following_id) {

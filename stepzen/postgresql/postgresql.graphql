@@ -148,10 +148,19 @@ type Query {
     @dbquery(
       type: "postgresql"
       query: """
-      select * from "follow" where "following_id" = $1
+      select * from "followers" where "following_id" = $1
       """
       configuration: "postgresql_config"
     )
+  getFollowing(username: String!): [Follow]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "followers" where "username" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  
 
   getPostBySearch(search: String!): [Post]
     @dbquery(
