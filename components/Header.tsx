@@ -35,8 +35,8 @@ const Header = () => {
         }
     }
 
-    const handleTyping = () => {
-        setSearch(event?.target?.value);
+    const handleTyping = (e:any) => {
+        setSearch(e?.target?.value);
     }
         
     useEffect(() => {
@@ -63,7 +63,7 @@ const Header = () => {
 
                 <form className="flex flex-1 items-center space-x-2 border-gray-200 border rounded-sm bg-gray-100 px-3 py-1">
                     <SearchIcon className="h-6 w-6 text-gray-400"/>
-                    <input type="text" placeholder="Search Reddit" onChange={handleTyping} className="flex-1 bg-transparent outline-none" />
+                    <input type="text" placeholder="Search Reddit" onChange={(e) => handleTyping(e)} className="flex-1 bg-transparent outline-none" />
                     <Link href={`/search/${search}`}>
                         <button type="submit" hidden/>
                     </Link>
