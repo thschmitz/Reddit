@@ -8,6 +8,7 @@ import Post from "../../components/Post"
 import { HeartIcon } from '@heroicons/react/solid'
 import { useSession } from 'next-auth/react';
 import { DELETE_FOLLOW, INSERT_FOLLOW } from '../../graphql/mutations';
+import Link from "next/link"
 
 const searchMsg = () => {
     const router = useRouter();
@@ -117,7 +118,9 @@ const searchMsg = () => {
                                     session?.user?.name !== user?.username ?
                                     <div className="flex items-center">
                                         <div className="flex items-center mr-5 space-x-1">
-                                            <p>Followers •</p>
+                                            <Link href={`/user/${router.query.id}/followers`}>
+                                                <p>Followers •</p>
+                                            </Link>
                                             <p className="font-bold text-xl">{followers}</p>
                                             <HeartIcon width={30} height={30} onClick={heartSubmit} className={liked? `text-red-400 cursor-pointer` : `text-black cursor-pointer`}/>
                                         </div>
@@ -129,7 +132,9 @@ const searchMsg = () => {
                                     :
                                     <div className="flex items-center">
                                     <div className="flex items-center mr-5 space-x-1">
-                                        <p>Followers •</p>
+                                        <Link href={`/user/${router.query.id}/followers`}>
+                                            <p>Followers •</p>
+                                        </Link>
                                         <p className="font-bold text-xl">{followers}</p>
                                     </div>
                                     <div className="flex items-center space-x-1">
