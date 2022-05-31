@@ -19,7 +19,6 @@ const following = () => {
         }
     })
     const user = dataUser?.getUserById;
-    console.log(user?.username)
 
     const {data: dataFollowing, loading: loadingFollowing} = useQuery(GET_FOLLOWING_BY_USERNAME, {
         variables: {

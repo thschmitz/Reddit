@@ -60,7 +60,6 @@ const searchMsg = () => {
     })
 
     const following = dataFollowing?.getFollowing?.length;
-    console.log(following)
     const posts: Post[] = post?.getPostByUsername;
     const createdHour = `${user?.created_at[8]}${user?.created_at[9]}/${user?.created_at[5]}${user?.created_at[6]}/${user?.created_at[0]}${user?.created_at[1]}${user?.created_at[2]}${user?.created_at[3]} ${user?.created_at[11]}${user?.created_at[12]}:${user?.created_at[14]}${user?.created_at[15]}`
     const qtdPosts = posts?.length;
@@ -86,7 +85,6 @@ const searchMsg = () => {
                     following_id: router.query.id,
                 }  
             });
-            console.log("unfollowed")
         } else {
             setLiked(true);
             const {data: {insertFollow: newFollow}} = await insertFollow({
@@ -96,7 +94,6 @@ const searchMsg = () => {
                     follow: true,
                 }  
             });
-            console.log("followed")
         }
     }
 

@@ -59,9 +59,6 @@ const PostBox = ({subreddit}: Props) => {
             if(!subredditExists) {
                 // create subreddit
 
-                console.log("Subreddit in me! Creating a new subreddit!")
-                console.log("Creating Post...", formData)
-
                 const {data: { insertSubreddit: newSubreddit} } = await addSubreddit({
                     variables: {
                         topic: formData.subreddit
@@ -80,12 +77,8 @@ const PostBox = ({subreddit}: Props) => {
                     }
                 })
 
-                console.log("New Post Added: ", newPost)
             } else {
                 // use another subreddit
-
-                console.log("Using existing subreddit!")
-                console.log(getSubredditListByTopic)
 
                 const image = formData.postImage || ""
 
@@ -99,7 +92,6 @@ const PostBox = ({subreddit}: Props) => {
                     }
                 })
 
-                console.log("New post added: ", newPost)
             }
 
             // After the post has been added!

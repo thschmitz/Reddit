@@ -18,7 +18,6 @@ const User = ({user}: Props) => {
         }
     })
     const username = dataUser?.getUserById;
-    console.log(username?.username)
 
     return (
         <Link href={`/user/${user.id}`}>
