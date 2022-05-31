@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import Link from "next/link"
 import User from '../../../components/User';
 import { Jelly } from '@uiball/loaders';
+import { ArrowLeftIcon } from '@heroicons/react/solid';
 
 const followers = () => {
     const {data:session} = useSession();
@@ -27,6 +28,7 @@ const followers = () => {
 
     return (
         <div className="mt-5 space-y-4 mx-auto my-7 max-w-5xl">
+            <Link href={`/user/${router.query.id}`}><ArrowLeftIcon className="cursor-pointer" width={20}/></Link>
             {
                 loadingFollowers?
                     <div className="flex w-full items-center justify-center p-20 text-xl">

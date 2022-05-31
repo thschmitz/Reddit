@@ -4,8 +4,9 @@ import {SEARCH_USERNAME, GET_FOLLOWING_BY_USERNAME, GET_USER_BY_ID } from "../..
 import { useQuery } from '@apollo/client';
 import { useSession } from 'next-auth/react';
 import Link from "next/link"
-import Following from '../../../components/Following';
 import { Jelly } from '@uiball/loaders';
+import { ArrowLeftIcon } from '@heroicons/react/solid';
+import User from '../../../components/User';
 
 const following = () => {
     const {data:session} = useSession();
@@ -29,6 +30,8 @@ const following = () => {
 
     return (
         <div className="mt-5 space-y-4 mx-auto my-7 max-w-5xl">
+            <Link href={`/user/${router.query.id}`}><ArrowLeftIcon className="cursor-pointer" width={20}/></Link>
+
             {
                 loadingFollowing?
                     <div className="flex w-full items-center justify-center p-20 text-xl">
@@ -47,7 +50,7 @@ const following = () => {
                             </div>
                             {
                                 following?.map((following: any) => (
-                                    <Following user={following}/>
+                                    <User user={following}/>
                                 ))
                             }
                             
