@@ -194,6 +194,7 @@ export const GET_FOLLOWING_BY_USERNAME = gql`
             id
             username
             created_at
+            following_id
         }
     }
 `

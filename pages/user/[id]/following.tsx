@@ -4,7 +4,7 @@ import {SEARCH_USERNAME, GET_FOLLOWING_BY_USERNAME, GET_USER_BY_ID } from "../..
 import { useQuery } from '@apollo/client';
 import { useSession } from 'next-auth/react';
 import Link from "next/link"
-import User from '../../../components/User';
+import Following from '../../../components/Following';
 import { Jelly } from '@uiball/loaders';
 
 const following = () => {
@@ -19,6 +19,7 @@ const following = () => {
         }
     })
     const user = dataUser?.getUserById;
+    console.log(user?.username)
 
     const {data: dataFollowing, loading: loadingFollowing} = useQuery(GET_FOLLOWING_BY_USERNAME, {
         variables: {
@@ -43,11 +44,11 @@ const following = () => {
 
                         <div className="w-full items-center justify-center p-10 text-xl">
                             <div className="text-2xl bg-white rounded-lg max-w-fit mt-10 p-4">
-                                <h1>See <span className="text-red-400">{following?.length} follower(es)</span> that <span className="underline">{user?.username}</span> has</h1>
+                                <h1>See <span className="text-red-400">{following?.length} people</span> that <span className="underline">{user?.username}</span> follows</h1>
                             </div>
                             {
-                                following?.map((follower: any) => (
-                                    <User user={follower}/>
+                                following?.map((following: any) => (
+                                    <Following user={following}/>
                                 ))
                             }
                             
