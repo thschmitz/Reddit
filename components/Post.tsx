@@ -89,8 +89,14 @@ const Post = ({post}: Props) => {
       toast("You will need to sign in to Vote!");
       return;
     }
+    const notification = toast.loading("Liking...");
 
-    if(vote && isUpvote) return;
+    if(vote && isUpvote) {     
+      toast.error("You have already voted", {
+        id: notification
+      });
+      return
+    }
     if(vote === false && !isUpvote) return;
 
     
@@ -101,6 +107,19 @@ const Post = ({post}: Props) => {
         upvote: isUpvote
       }
     })
+
+    if(isUpvote == true){
+      toast.success("Sucessfully Upvote", {
+        id: notification
+      })
+    } else {
+      toast.success("Sucessfully Downvote", {
+        id: notification
+      })
+    }
+    
+
+
 
 
   }

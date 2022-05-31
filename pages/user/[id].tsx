@@ -9,6 +9,7 @@ import { HeartIcon } from '@heroicons/react/solid'
 import { useSession } from 'next-auth/react';
 import { DELETE_FOLLOW, INSERT_FOLLOW } from '../../graphql/mutations';
 import Link from "next/link"
+import toast from 'react-hot-toast'
 
 const searchMsg = () => {
     const router = useRouter();
@@ -76,9 +77,12 @@ const searchMsg = () => {
     })
 
     const heartSubmit = async () => {
-
+        const notification = toast.loading("Creating new Post...");
         if(liked){
             setLiked(false);
+            toast.success("Sucessfully Unfollowed", {
+                id: notification
+            })
             const {data: {insertFollow: newFollow}} = await deleteFollow({
                 variables: {
                     username: session?.user?.name,
@@ -87,6 +91,9 @@ const searchMsg = () => {
             });
         } else {
             setLiked(true);
+            toast.success("Sucessfully Followed", {
+                id: notification
+            })
             const {data: {insertFollow: newFollow}} = await insertFollow({
                 variables: {
                     username: session?.user?.name,

@@ -99,7 +99,7 @@ const searchMsg = () => {
                             </div>
                         :
                         <div className="flex w-full items-center justify-center p-20 text-xl">
-                            "No posts found"
+                            No posts found
                         </div>
                     :
                     <div className="flex w-full items-center justify-center p-10 text-xl">
