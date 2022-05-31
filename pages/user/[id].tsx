@@ -119,13 +119,15 @@ const searchMsg = () => {
                                     <div className="flex items-center">
                                         <div className="flex items-center mr-5 space-x-1">
                                             <Link href={`/user/${router.query.id}/followers`}>
-                                                <p>Followers •</p>
+                                                <p className="cursor-pointer">Followers •</p>
                                             </Link>
                                             <p className="font-bold text-xl">{followers}</p>
                                             <HeartIcon width={30} height={30} onClick={heartSubmit} className={liked? `text-red-400 cursor-pointer` : `text-black cursor-pointer`}/>
                                         </div>
                                         <div className="flex items-center space-x-1">
-                                            <p>Following •</p>
+                                            <Link href={`/user/${router.query.id}/following`}>
+                                                <p className="cursor-pointer">Following •</p>
+                                            </Link>
                                             <p className="font-bold text-xl">{following}</p>
                                         </div>
                                     </div>
@@ -133,12 +135,14 @@ const searchMsg = () => {
                                     <div className="flex items-center">
                                     <div className="flex items-center mr-5 space-x-1">
                                         <Link href={`/user/${router.query.id}/followers`}>
-                                            <p>Followers •</p>
+                                            <p className="cursor-pointer">Followers •</p>
                                         </Link>
                                         <p className="font-bold text-xl">{followers}</p>
                                     </div>
                                     <div className="flex items-center space-x-1">
-                                        <p>Following •</p>
+                                        <Link href={`/user/${router.query.id}/following`}>
+                                            <p className="cursor-pointer">Following •</p>
+                                        </Link>
                                         <p className="font-bold text-xl">{following}</p>
                                     </div>
                                 </div>
@@ -160,7 +164,7 @@ const searchMsg = () => {
                                 <h1>See <span className="text-red-400">{qtdPosts} post(s)</span> that <span className="underline">{user?.username}</span> has already created</h1>
                             </div>
                     :
-                        <h1>This user has not created any post yet</h1>
+                            ""
                     }
                     <div className="mt-10 flex-1 space-y-4">
                         {
