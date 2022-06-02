@@ -71,7 +71,7 @@ const Header = () => {
 
                 <div className="items-center space-x-2 text-gray-500 mx-5 hidden lg:inline-flex">
                     <SparklesIcon className="icon"/>
-                    <GlobeIcon className="icon"/>
+                    <Link href="/global"><GlobeIcon className="icon"/></Link>
                     <VideoCameraIcon  className="icon"/>
                     <hr className="h-10 border border-gray-100"/>
                     <ChatIcon className="icon"/>
