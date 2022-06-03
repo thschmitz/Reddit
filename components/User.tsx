@@ -23,8 +23,6 @@ const User = ({user, globalStatement, index}: Props) => {
 
     const userId = dataUser?.getIdByUsername;
 
-    console.log(userId)
-
     const {data: dataFollowing, loading: loading, error: error} = useQuery(GET_USER_BY_ID, {
         variables:{
             id: user.following_id
@@ -32,17 +30,15 @@ const User = ({user, globalStatement, index}: Props) => {
     })
     const username = dataFollowing?.getUserById;
 
-    console.log("username: ", username)
-
     return (
         <div>
             {
-            globalStatement?
+            !globalStatement?
                 <Link href={`/user/${username?.id || userId?.id || user.id}`}>
                     <div className="bg-white flex flex-1 p-5 cursor-pointer rounded-lg hover:bg-gray-300 mt-2">
                         <div className="items-center space-x-2 flex">
                             <Avatar seed={username?.username || user?.username} /> {/* subreddit[0] because it returns an array with the info*/}
-                            <div>{username?.username || user.username}</div>
+                            <div>{user?.username || username?.username }</div>
                             <p className="pl-20"><span className="dateCreated">Entered in: </span>{data}<span className="dateCreated">UTC</span></p>
                         </div>
                     </div>
@@ -53,7 +49,7 @@ const User = ({user, globalStatement, index}: Props) => {
                     <ChevronUpIcon className="h-4 w-4 flex-schrink-0 text-green-400"/>
                     <Avatar seed={user.username} />
                     <p className="flex-1 truncate">r/{user.username}</p>
-                    <Link href={`/user/${user.username}`}>
+                    <Link href={`/user/${user.id}`}>
                         <div className="cursor-pointer rounded-full bg-blue-500 px-3 text-white">
                             View
                         </div>

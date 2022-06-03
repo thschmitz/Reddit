@@ -12,12 +12,19 @@ export const GET_SUBREDDIT_BY_TOPIC = gql`
 
 export const GET_ALL_USERS = gql`
     query MyQuery{
-        getUsers{
+        getUsers {
+            created_at
             id
             username
-            created_at
+            posts {
+            title
+            body
+            }
+            followers {
+            username
         }
     }
+}
 `
 
 export const GET_ALL_USERS_BY_SEARCH = gql`

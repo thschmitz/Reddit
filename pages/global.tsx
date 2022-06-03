@@ -1,13 +1,11 @@
 
 import React from 'react'
-import { GET_ALL_POSTS, GET_ALL_POSTS_BY_TOPIC } from '../graphql/queries'
+import { GET_ALL_POSTS, GET_ALL_POSTS_BY_TOPIC, GET_SUBREDDITS_WITH_LIMIT, GET_ID_BY_USERNAME, GET_ALL_USERS } from '../graphql/queries'
 import {useQuery} from "@apollo/client"
 import Post from "../components/Post"
 import {Jelly} from "@uiball/loaders"
-import { GET_SUBREDDITS_WITH_LIMIT } from '../graphql/queries'
 import SubredditRow from "../components/SubredditRow"
 import User from '../components/User'
-import { GET_ALL_USERS } from '../graphql/queries'
 
 const global = () => {
   const {data, error} =  useQuery(GET_ALL_POSTS)
@@ -17,16 +15,15 @@ const global = () => {
 
   const {data: subredditData} = useQuery(GET_SUBREDDITS_WITH_LIMIT, {
     variables: {
-      limit: 10,
+      limit: 5,
     }
   })
-
   const subreddits: Subreddit[] = subredditData?.getSubredditListLimit;
 
   const {data:dataUser, loading: loadingUser} = useQuery(GET_ALL_USERS)
 
   const users = dataUser?.getUsers;
-  console.log(dataUser)
+  console.log(users)
 
   return (
     <div className="mt-5 space-y-4 max-w-5xl my-7 mx-auto">

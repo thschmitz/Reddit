@@ -12,19 +12,25 @@ const followers = () => {
     const {data:session} = useSession();
     const router = useRouter();
 
+    const {data: dataUser, loading: loadingUser, error: errorUser} = useQuery(GET_USER_BY_ID, {
+        variables:{
+            id: router.query.id
+        }
+    })
+    
+    const user = dataUser?.getUserById;
+
     const {data: dataFollowers, loading: loadingFollowers} = useQuery(GET_ALL_FOLLOWERS, {
         variables: {
             following_id: router.query.id,
         }
     })
 
-    const {data: dataUser, loading: loadingUser, error: errorUser} = useQuery(GET_USER_BY_ID, {
-        variables:{
-            id: router.query.id
-        }
-    })
-    const user = dataUser?.getUserById;
+
     const followers = dataFollowers?.getFollowers;
+    followers?.map((follower:any) => {
+        console.log(follower)
+    })
 
     return (
         <div className="mt-5 space-y-4 mx-auto my-7 max-w-5xl">
@@ -46,7 +52,7 @@ const followers = () => {
                                 <h1>See <span className="text-red-400">{followers.length} follower(es)</span> that <span className="underline">{user?.username}</span> has</h1>
                             </div>
                             {
-                                followers.map((follower: any) => (
+                                followers?.map((follower: any) => (
                                     <User user={follower}/>
                                 ))
                             }

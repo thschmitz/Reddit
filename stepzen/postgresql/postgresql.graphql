@@ -22,6 +22,18 @@ type User {
   created_at: DateTime
   id: ID!
   username: String
+  posts: [Post]
+    @materializer(
+      query: "getPostByUsername",
+      arguments: [{ name: "username", field: "username" }]
+
+    )
+
+  followers: [Follow]
+    @materializer(
+      query: "getFollowers",
+      arguments: [{ name: "following_id", field: "id" }]
+    )
 }
 
 type Post {
@@ -100,6 +112,16 @@ type Query {
       configuration: "postgresql_config"
     )
   
+  getUsersWithRanking: [User]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "users" order by "ranking" desc
+      """
+      configuration: "postgresql_config"
+    )
+  
+  
   getUserById(id: ID!): User
     @dbquery(
       type: "postgresql"
@@ -153,6 +175,15 @@ type Query {
       type: "postgresql"
       query: """
       select * from "followers" where "following_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  
+  getFollowersByUsername(username: String!): [Follow]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "followers" where "username" = $1
       """
       configuration: "postgresql_config"
     )
