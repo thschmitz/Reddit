@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { GET_ALL_POSTS, GET_ALL_POSTS_BY_TOPIC, GET_SUBREDDITS_WITH_LIMIT, GET_ID_BY_USERNAME, GET_ALL_USERS } from '../graphql/queries'
+import { GET_ALL_POSTS, GET_SUBREDDITS_WITH_LIMIT, GET_ALL_USERS_WITH_LIMIT } from '../graphql/queries'
 import {useQuery} from "@apollo/client"
 import Post from "../components/Post"
 import {Jelly} from "@uiball/loaders"
@@ -20,9 +20,13 @@ const global = () => {
   })
   const subreddits: Subreddit[] = subredditData?.getSubredditListLimit;
 
-  const {data:dataUser, loading: loadingUser} = useQuery(GET_ALL_USERS)
+  const {data:dataUser, loading: loadingUser} = useQuery(GET_ALL_USERS_WITH_LIMIT, {
+      variables: {
+          limit: 5,
+      }
+  })
 
-  const users = dataUser?.getUsers;
+  const users = dataUser?.getUserWithLimit;
   console.log(users)
 
   return (

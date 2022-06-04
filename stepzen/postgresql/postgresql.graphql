@@ -108,15 +108,17 @@ type Query {
   getUsers: [User]
     @dbquery(
       type: "postgresql"
-      table: "users"
+      query: """
+      select * from "users"
+      """
       configuration: "postgresql_config"
     )
-  
-  getUsersWithRanking: [User]
+
+  getUserWithLimit(limit: Int!): [User]
     @dbquery(
       type: "postgresql"
       query: """
-      select * from "users" order by "ranking" desc
+      select * from "users" limit $1
       """
       configuration: "postgresql_config"
     )

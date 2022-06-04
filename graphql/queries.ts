@@ -27,6 +27,23 @@ export const GET_ALL_USERS = gql`
 }
 `
 
+export const GET_ALL_USERS_WITH_LIMIT = gql`
+    query MyQuery($limit: Int!){
+        getUserWithLimit(limit: $limit) {
+            created_at
+            id
+            username
+            posts {
+            title
+            body
+            }
+            followers {
+            username
+            }
+        }
+    }
+`
+
 export const GET_ALL_USERS_BY_SEARCH = gql`
     query MyQuery($search: String!){
         getUsersBySearch(search: $search){
