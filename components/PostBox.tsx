@@ -10,6 +10,7 @@ import { GET_ALL_POSTS, GET_SUBREDDIT_BY_TOPIC, GET_ID_BY_USERNAME } from '../gr
 import { ADD_SUBREDDIT } from '../graphql/mutations'
 import toast from 'react-hot-toast'
 import {useQuery} from "@apollo/client"
+import Link from "next/link"
 
 type FormData= {
     postTitle: string,
@@ -24,6 +25,15 @@ type Props = {
 
 const PostBox = ({subreddit}: Props) => {
     const {data:session} = useSession();
+
+    const {data: mySelfId, error: MySelfError} = useQuery(GET_ID_BY_USERNAME, {
+        variables: {
+            username: session?.user?.name
+        }
+    })
+
+    const mySelfIdValue = mySelfId?.getIdByUsername.id;
+
     const [addPost] = useMutation(ADD_POST, {
         refetchQueries: [
             GET_ALL_POSTS, "getPostList"
@@ -127,7 +137,7 @@ const PostBox = ({subreddit}: Props) => {
     return (
         <form onSubmit={onSubmit} className="sticky top-20 z-50 rounded-md border border-gray-300 bg-white p-2">
             <div className="flex items-center space-x-3">
-                <Avatar/>
+                <Link href={`/user/${mySelfIdValue}`}><div className="cursor-pointer"><Avatar/></div></Link>
                 <input {...register("postTitle", {required:true})} disabled={!session} className="rounded-md flex-1 bg-gray-50 p-2 pl-5 outline-none" type="text" placeholder={session? subreddit ? `Create a post with r/${subreddit}` : "Create a post by entering a title!" : "Sign in to post!" }/>
                 <PhotographIcon onClick={() => setImageBoxOpen(!imageBoxOpen)} className={`h-6 text-gray-400 cursor-pointer ${imageBoxOpen && 'text-blue-300'}`}/>
                 <LinkIcon className="h-6 text-gray-400 cursor-pointer"/>

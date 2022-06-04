@@ -64,7 +64,7 @@ const Feed = ({topic}: Props) => {
   
 
   return (
-    <div className="mt-5 space-y-4">
+    <div className="-mt-24 space-y-4">
       {
         posts? 
           <div className="flex-1 flex">
@@ -73,16 +73,10 @@ const Feed = ({topic}: Props) => {
                 dataIdFollowing?.map((id: any) => (
                     posts?.map((post:any) => (
                       post?.usernameID === id.following_id ? <Post key={post.id} post={post} /> : <div className="invisible">{soma+=1}</div>
-
                     ))
-                  
                 ))
-
-
               }
-              
             </div>  
-
               {
                 nothing ? 
                 <div className="text-center m-20 items-center mr-52">
@@ -93,7 +87,7 @@ const Feed = ({topic}: Props) => {
                 ""
               }
             
-            <div className="sticky top-36 mx-5 hidden h-fit min-w-[300px] rounded-md border border-gray-300 bg-white lg:inline">
+            <div className="sticky top-44 mx-5 hidden h-fit min-w-[300px] rounded-md border border-gray-300 bg-white lg:inline">
               <p className="text-md mb-1 p-4 pb-3 font-bold">Top Communities</p>
               {subreddits?.map((subreddit, i) => (
                 <SubredditRow topic={subreddit.topic} index={i} key={subreddit.id}/>
@@ -101,7 +95,7 @@ const Feed = ({topic}: Props) => {
             </div>
           </div>
         :
-        <div className="flex w-full items-center justify-center p-10 text-xl">
+        <div className="flex w-full items-center mt-52 justify-center p-10 text-xl">
           <Jelly size={50} color="#ff4501"/>
         </div>
       }
