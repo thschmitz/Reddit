@@ -44,6 +44,27 @@ export const GET_ALL_USERS_WITH_LIMIT = gql`
     }
 `
 
+export const GET_FOLLOWER_ID = gql`
+    query MyQuery($username: String!){
+        getFollowerId(username: $username) {
+            following_id
+        }
+    }
+`
+
+export const GET_POST_BY_FOLLOWERID = gql`
+    query MyQuery($followerId: Int!){
+        getPostByID(followerId: $followerId) {
+            title
+            body
+            created_at
+            id
+            user_id
+            subreddit_id
+        }
+    }
+`
+
 export const GET_ALL_USERS_BY_SEARCH = gql`
     query MyQuery($search: String!){
         getUsersBySearch(search: $search){

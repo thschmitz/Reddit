@@ -1,23 +1,37 @@
 import React from 'react'
-import { GET_ALL_POSTS, GET_ALL_POSTS_BY_TOPIC } from '../graphql/queries'
+import { GET_ALL_POSTS, GET_ALL_POSTS_BY_TOPIC, GET_USER_BY_ID } from '../graphql/queries'
 import {useQuery} from "@apollo/client"
 import Post from "./Post"
 import {Jelly} from "@uiball/loaders"
-import { GET_SUBREDDITS_WITH_LIMIT } from '../graphql/queries'
+import { GET_SUBREDDITS_WITH_LIMIT, GET_FOLLOWER_ID } from '../graphql/queries'
 import SubredditRow from "../components/SubredditRow"
+import { useSession } from 'next-auth/react'
 
 type Props = {
   topic?: string,
 }
 
 const Feed = ({topic}: Props) => {
+  const {data: session} = useSession();
+  
+  const {data: dataId, error: errorId} = useQuery(GET_FOLLOWER_ID, {
+    variables: {
+      username: session?.user?.name
+    }
+  })
+
+  const dataIdFollowing = dataId?.getFollowerId;
+  console.log("dataIdFollowing: ", dataIdFollowing);
+
   const {data, error} = !topic ? useQuery(GET_ALL_POSTS) : useQuery(GET_ALL_POSTS_BY_TOPIC, {
     variables: {
       topic: topic,
     }
   })
-
   const posts: Post[] = !topic? data?.getPostList : data?.getPostListByTopic;
+
+
+  console.log("postsFollower: ", posts)
 
 
   const {data: subredditData} = useQuery(GET_SUBREDDITS_WITH_LIMIT, {

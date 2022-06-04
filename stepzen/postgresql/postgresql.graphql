@@ -273,6 +273,27 @@ type Query {
       """
       configuration: "postgresql_config"
     )
+  
+  getPostByID(username: String!): [Post]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select *, "post".id as id from "post"
+      where username = $1
+      order by "post"."created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
+  
+  getFollowerId(username: String!): [Follow]
+    @dbquery(
+      type: "postgresql"
+      query: """
+        select * from "followers" where "username" = $1
+
+      """
+      configuration: "postgresql_config"
+    )
 
   getPostListByTopic(topic: String!): [Post]
     @dbquery(
