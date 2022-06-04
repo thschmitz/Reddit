@@ -6,9 +6,10 @@ import {useForm} from "react-hook-form"
 import { ADD_POST } from '../graphql/mutations'
 import {useMutation} from "@apollo/client"
 import client from "../apollo-client"
-import { GET_ALL_POSTS, GET_SUBREDDIT_BY_TOPIC } from '../graphql/queries'
+import { GET_ALL_POSTS, GET_SUBREDDIT_BY_TOPIC, GET_ID_BY_USERNAME } from '../graphql/queries'
 import { ADD_SUBREDDIT } from '../graphql/mutations'
 import toast from 'react-hot-toast'
+import {useQuery} from "@apollo/client"
 
 type FormData= {
     postTitle: string,
@@ -54,6 +55,14 @@ const PostBox = ({subreddit}: Props) => {
                 }
             })
 
+            const {data: {getIdByUsername}} = await client.query({
+                query: GET_ID_BY_USERNAME,
+                variables: {
+                    username: session?.user?.name
+                }
+            })
+
+            console.log("userIdPost: ", getIdByUsername.id)
             const subredditExists = getSubredditListByTopic.length > 0;
 
             if(!subredditExists) {
@@ -74,6 +83,7 @@ const PostBox = ({subreddit}: Props) => {
                         subreddit_id: newSubreddit.id,
                         title: formData.postTitle,
                         username: session?.user?.name,
+                        usernameID: getIdByUsername.id
                     }
                 })
 
@@ -88,7 +98,8 @@ const PostBox = ({subreddit}: Props) => {
                         image: image,
                         subreddit_id: getSubredditListByTopic[0].id,
                         title: formData.postTitle,
-                        username: session?.user?.name
+                        username: session?.user?.name,
+                        usernameID: getIdByUsername.id
                     }
                 })
 
@@ -109,6 +120,7 @@ const PostBox = ({subreddit}: Props) => {
             toast.error("Whoops something went wrong", {
                 id: notification
             })
+            console.log(error)
         }
     })
 

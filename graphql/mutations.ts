@@ -96,6 +96,7 @@ export const ADD_POST = gql`
         $subreddit_id: ID!,
         $title: String!,
         $username: String!,
+        $usernameID: ID!,
     ) {
         insertPost(
             body: $body
@@ -103,7 +104,7 @@ export const ADD_POST = gql`
             subreddit_id: $subreddit_id
             title: $title
             username: $username
-            
+            usernameID: $usernameID
         ) {
             body
             created_at
@@ -112,6 +113,7 @@ export const ADD_POST = gql`
             subreddit_id
             title
             username
+            usernameID
         }
     }
 `

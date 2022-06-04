@@ -34,6 +34,11 @@ type User {
       query: "getFollowers",
       arguments: [{ name: "following_id", field: "id" }]
     )
+  following: [Follow]
+    @materializer(
+      query: "getFollowing",
+      arguments: [{ name: "username", field: "username" }]
+    )
 }
 
 type Post {
@@ -44,6 +49,7 @@ type Post {
   subreddit_id: ID
   title: String
   username: String
+  usernameID: ID
   #comments
   comments: [Comment]
     @materializer(
@@ -181,15 +187,6 @@ type Query {
       configuration: "postgresql_config"
     )
   
-  getFollowersByUsername(username: String!): [Follow]
-    @dbquery(
-      type: "postgresql"
-      query: """
-      select * from "followers" where "username" = $1
-      """
-      configuration: "postgresql_config"
-    )
-  
   getFollowing(username: String!): [Follow]
     @dbquery(
       type: "postgresql"
@@ -273,14 +270,12 @@ type Query {
       """
       configuration: "postgresql_config"
     )
-  
-  getPostByID(username: String!): [Post]
+
+  getPostWithUsers(id: ID!): [User]
     @dbquery(
       type: "postgresql"
       query: """
-      select *, "post".id as id from "post"
-      where username = $1
-      order by "post"."created_at" desc
+      select * from "users" where id = $1
       """
       configuration: "postgresql_config"
     )
@@ -359,6 +354,7 @@ type Mutation {
     subreddit_id: ID!
     title: String!
     username: String!
+    usernameID: ID!
   ): Post
     @dbquery(
       type: "postgresql"

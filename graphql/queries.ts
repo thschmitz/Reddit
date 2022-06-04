@@ -52,15 +52,16 @@ export const GET_FOLLOWER_ID = gql`
     }
 `
 
-export const GET_POST_BY_FOLLOWERID = gql`
-    query MyQuery($followerId: Int!){
-        getPostByID(followerId: $followerId) {
-            title
-            body
+export const GET_POST_WITH_USER = gql`
+    query MyQuery($id: ID!){
+        getPostWithUser(id: $id) {
             created_at
             id
-            user_id
-            subreddit_id
+            username
+            posts {
+                title
+                body
+            }
         }
     }
 `
@@ -264,6 +265,7 @@ export const GET_ALL_POSTS = gql`
             image
             title
             username
+            usernameID
             subreddit_id
             comments{
                 created_at
