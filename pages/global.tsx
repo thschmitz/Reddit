@@ -49,7 +49,7 @@ const global = () => {
               ))}
               <p className="text-md mb-1 p-4 pb-3 font-bold">Top Users</p>
               {users?.map((user:any, i:number) => (
-                <User key={user.id} user={user} globalStatement={true} index={i}/>
+                <User key={user.id} user={user} globalStatement={true} index={i} following={false}/>
                 ))}
             </div>
           </div>
