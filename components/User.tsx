@@ -31,15 +31,18 @@ const User = ({user, globalStatement, index}: Props) => {
     })
     const username = dataFollowing?.getUserById;
 
+    if(loading)
+    return(
+        <div className="flex w-full items-center justify-center p-20 text-xl">
+            <Jelly size={50} color="#ff4501"/>
+        </div>
+    )
+
     return (
         <div>
             {
             !globalStatement?
-                loading?
-                <div className="flex w-full items-center justify-center p-20 text-xl">
-                    <Jelly size={50} color="#ff4501"/>
-                </div>
-                :
+
                 <Link href={`/user/${username?.id || userId?.id || user.id}`}>
                     <div className="bg-white flex flex-1 p-5 cursor-pointer rounded-lg hover:bg-gray-300 mt-2">
                         <div className="items-center space-x-2 flex">

@@ -12,6 +12,11 @@ type Mark {
   post_id: ID
   username: String
   usernameID: ID
+  posts: Post
+    @materializer(
+      query: "getPostListByPostId",
+      arguments: [{name: "post_id", field: "post_id"}]
+    )
 }
 
 type Follow{

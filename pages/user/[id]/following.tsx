@@ -30,38 +30,40 @@ const following = () => {
 
     console.log("following: ", following)
 
+    if(loadingFollowing)
+    return(
+        <div className="flex w-full items-center justify-center p-20 text-xl">
+            <Jelly size={50} color="#ff4501"/>
+        </div>
+    )
+
     return (
         <div className="mt-5 space-y-4 mx-auto my-7 max-w-5xl">
             <Link href={`/user/${router.query.id}`}><ArrowLeftIcon className="cursor-pointer" width={20}/></Link>
 
             {
-                loadingFollowing?
+                following?.length === 0 ?
                     <div className="flex w-full items-center justify-center p-20 text-xl">
-                        <Jelly size={50} color="#ff4501"/>
+                        <p>No followings yet</p>
                     </div>
                 :
-                    following?.length === 0 ?
-                        <div className="flex w-full items-center justify-center p-20 text-xl">
-                            <p>No followings yet</p>
-                        </div>
-                    :
 
-                        <div className="w-full items-center justify-center p-10 text-xl">
-                            <div className="text-2xl bg-white rounded-lg max-w-fit mt-10 p-4">
-                                {
-                                    user?.username === session?.user?.name ?
-                                        <h1>See <span className="text-red-400">{following?.length} following(es)</span> that <span className="underline">you</span> have</h1>
-                                    :
-                                        <h1>See <span className="text-red-400">{following?.length} people</span> that <span className="underline">{user?.username}</span> follows</h1>
-                                }
-                            </div>
+                    <div className="w-full items-center justify-center p-10 text-xl">
+                        <div className="text-2xl bg-white rounded-lg max-w-fit mt-10 p-4">
                             {
-                                following?.map((following: any) => (
-                                    <User user={following} globalStatement={false} index={0}/>
-                                ))
+                                user?.username === session?.user?.name ?
+                                    <h1>See <span className="text-red-400">{following?.length} following(es)</span> that <span className="underline">you</span> have</h1>
+                                :
+                                    <h1>See <span className="text-red-400">{following?.length} people</span> that <span className="underline">{user?.username}</span> follows</h1>
                             }
-                            
                         </div>
+                        {
+                            following?.map((following: any) => (
+                                <User user={following} globalStatement={false} index={0}/>
+                            ))
+                        }
+                        
+                    </div>
                     
             }
         </div>

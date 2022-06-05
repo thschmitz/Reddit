@@ -338,8 +338,40 @@ export const GET_MARK = gql`
 export const GET_MARK_BY_ID = gql`
     query MyQuery($id: ID!){
         getMarkById(id: $id) {
+            created_at
             id
             post_id
+            username
+            usernameID
+            posts {
+            body
+            title
+            comments {
+                created_at
+                id
+                post_id
+                text
+                username
+            }
+            created_at
+            id
+            image
+            subreddit {
+                created_at
+                id
+                topic
+            }
+            subreddit_id
+            username
+            usernameID
+            votes {
+                created_at
+                id
+                post_id
+                upvote
+                username
+            }
+            }
         }
     }
 `
