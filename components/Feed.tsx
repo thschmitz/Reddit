@@ -43,7 +43,7 @@ const Feed = ({topic}: Props) => {
   const posts: Post[] = !topic? data?.getPostList : data?.getPostListByTopic;
 
 
-  console.log("postsFollower: ", posts?.length)
+  console.log("posts: ", posts)
 
 
   const {data: subredditData} = useQuery(GET_SUBREDDITS_WITH_LIMIT, {
@@ -70,6 +70,11 @@ const Feed = ({topic}: Props) => {
           <div className="flex-1 flex">
             <div>
               {
+                topic?
+                posts?.map((post:any) => (
+                  <Post key={post.id} post={post} />
+                ))
+                :
                 dataIdFollowing?.map((id: any) => (
                     posts?.map((post:any) => (
                       post?.usernameID === id.following_id ? <Post key={post.id} post={post} /> : <div className="invisible">{soma+=1}</div>
