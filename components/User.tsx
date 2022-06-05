@@ -4,6 +4,7 @@ import Link from "next/link"
 import { GET_ID_BY_USERNAME, GET_USER_BY_ID } from '../graphql/queries'
 import { useQuery } from '@apollo/client';
 import { ChevronUpIcon } from '@heroicons/react/solid'
+import { Jelly } from '@uiball/loaders';
 
 type Props = {
     user: any,
@@ -34,15 +35,22 @@ const User = ({user, globalStatement, index}: Props) => {
         <div>
             {
             !globalStatement?
+                loading?
+                <div className="flex w-full items-center justify-center p-20 text-xl">
+                    <Jelly size={50} color="#ff4501"/>
+                </div>
+                :
                 <Link href={`/user/${username?.id || userId?.id || user.id}`}>
                     <div className="bg-white flex flex-1 p-5 cursor-pointer rounded-lg hover:bg-gray-300 mt-2">
                         <div className="items-center space-x-2 flex">
                             <Avatar seed={username?.username || user?.username} /> {/* subreddit[0] because it returns an array with the info*/}
-                            <div>{user?.username || username?.username }</div>
+                            <div>{username?.username || user?.username  }</div>
                             <p className="pl-20"><span className="dateCreated">Entered in: </span>{data}<span className="dateCreated">UTC</span></p>
                         </div>
                     </div>
                 </Link>
+                
+                
             :
                 <div className="flex items-center space-x-2 border-t bg-white px-4 py-2">
                     <p>{index + 1}</p>

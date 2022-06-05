@@ -46,20 +46,26 @@ const followers = () => {
                             <p>No followers yet</p>
                         </div>
                     :
-
-                        <div className="w-full items-center justify-center p-10 text-xl">
-                            <div className="text-2xl bg-white rounded-lg max-w-fit mt-10 p-4">
-                                <h1>See <span className="text-red-400">{followers.length} follower(es)</span> that <span className="underline">{user?.username}</span> has</h1>
+                        user.username && followers?
+                            <div className="w-full items-center justify-center p-10 text-xl">
+                                <div className="text-2xl bg-white rounded-lg max-w-fit mt-10 p-4">
+                                    {
+                                        user?.username === session?.user?.name ?
+                                            <h1>See <span className="text-red-400">{followers?.length} follower(es)</span> that <span className="underline">you</span> have</h1>
+                                        :
+                                            <h1>See <span className="text-red-400">{followers?.length} follower(es)</span> that <span className="underline">{user?.username}</span> has</h1>
+                                    }
+                                </div>
+                                {
+                                    followers?.map((follower: any) => (
+                                        <User user={follower} globalStatement={false} index={0}/>
+                                    ))
+                                }
+                                
                             </div>
-                            {
-                                followers?.map((follower: any) => (
-                                    <User user={follower}/>
-                                ))
-                            }
-                            
-                        </div>
-                    
-            }
+                        :
+                        ""
+                }
         </div>
 
                 

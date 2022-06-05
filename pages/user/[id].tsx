@@ -138,19 +138,25 @@ const searchMsg = () => {
                                     </div>
                                     :
                                     <div className="flex items-center">
-                                    <div className="flex items-center mr-5 space-x-1">
-                                        <Link href={`/user/${router.query.id}/followers`}>
-                                            <p className="cursor-pointer">Followers •</p>
-                                        </Link>
-                                        <p className="font-bold text-xl">{followers}</p>
+                                        <div className="flex items-center mr-5 space-x-1">
+                                            <Link href={`/user/${router.query.id}/followers`}>
+                                                <p className="cursor-pointer">Followers •</p>
+                                            </Link>
+                                            <p className="font-bold text-xl">{followers}</p>
+                                        </div>
+                                        <div className="flex items-center mr-5 space-x-1">
+                                            <Link href={`/user/${router.query.id}/following`}>
+                                                <p className="cursor-pointer">Following •</p>
+                                            </Link>
+                                            <p className="font-bold text-xl">{following}</p>
+                                        </div>
+                                        <div className="flex items-center space-x-1">
+                                            <Link href={`/user/${router.query.id}/following`}>
+                                                <p className="cursor-pointer">Marks •</p>
+                                            </Link>
+                                            <p className="font-bold text-xl">{following}</p>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center space-x-1">
-                                        <Link href={`/user/${router.query.id}/following`}>
-                                            <p className="cursor-pointer">Following •</p>
-                                        </Link>
-                                        <p className="font-bold text-xl">{following}</p>
-                                    </div>
-                                </div>
 
                                 }
                             </div>
@@ -176,7 +182,7 @@ const searchMsg = () => {
                     :
                             ""
                     }
-                    <div className="mt-10 flex-1 space-y-4">
+                    <div className="mt-10 flex-1 space-y-4 max-w-5xl my-7 mx-auto">
                         {
                             loadingPost?
                                 <div className="flex w-full items-center justify-center p-20 text-xl">

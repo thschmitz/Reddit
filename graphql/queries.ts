@@ -322,3 +322,15 @@ export const GET_ALL_POSTS_BY_TOPIC = gql`
         }
     }
 `
+
+export const GET_MARK = gql`
+    query MyQuery($username: String!, $post_id: ID!){
+        getMark(username: $username, post_id: $post_id) {
+            created_at
+            id
+            post_id
+            username
+            usernameID
+        }
+    }
+`

@@ -351,11 +351,11 @@ type Query {
       configuration: "postgresql_config"
     )
   
-  getMark(post_id: ID!, username: String!): Mark
+  getMark(username: String!, post_id: ID!): [Mark]
     @dbquery(
       type: "postgresql"
-      table: """
-      select * from "marks" where "post_id" = $1 and "username" = $2
+      query: """
+      select * from "marks" where "username" = $1 and "post_id" = $2
       """
       configuration: "postgresql_config"
     )

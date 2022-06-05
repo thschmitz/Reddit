@@ -28,6 +28,8 @@ const following = () => {
     })
     const following = dataFollowing?.getFollowing;
 
+    console.log("following: ", following)
+
     return (
         <div className="mt-5 space-y-4 mx-auto my-7 max-w-5xl">
             <Link href={`/user/${router.query.id}`}><ArrowLeftIcon className="cursor-pointer" width={20}/></Link>
@@ -46,11 +48,16 @@ const following = () => {
 
                         <div className="w-full items-center justify-center p-10 text-xl">
                             <div className="text-2xl bg-white rounded-lg max-w-fit mt-10 p-4">
-                                <h1>See <span className="text-red-400">{following?.length} people</span> that <span className="underline">{user?.username}</span> follows</h1>
+                                {
+                                    user?.username === session?.user?.name ?
+                                        <h1>See <span className="text-red-400">{following?.length} following(es)</span> that <span className="underline">you</span> have</h1>
+                                    :
+                                        <h1>See <span className="text-red-400">{following?.length} people</span> that <span className="underline">{user?.username}</span> follows</h1>
+                                }
                             </div>
                             {
                                 following?.map((following: any) => (
-                                    <User user={following}/>
+                                    <User user={following} globalStatement={false} index={0}/>
                                 ))
                             }
                             

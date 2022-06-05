@@ -6,7 +6,7 @@ import Link from "next/link"
 import {Jelly} from "@uiball/loaders"
 import { useSession } from 'next-auth/react'
 import toast from 'react-hot-toast'
-import { GET_ALL_VOTES_BY_POST_ID, GET_ALL_POSTS, GET_ID_BY_USERNAME } from '../graphql/queries'
+import { GET_ALL_VOTES_BY_POST_ID, GET_ALL_POSTS, GET_ID_BY_USERNAME, GET_MARK } from '../graphql/queries'
 import {ADD_MARK, DELETE_COMMENT, DELETE_MARK, DELETE_POST, DELETE_VOTE} from "../graphql/mutations"
 import {useQuery, useMutation} from "@apollo/client"
 import {ADD_VOTE} from "../graphql/mutations"
@@ -38,21 +38,28 @@ const Post = ({post}: Props) => {
 
   const {data: dataIdUsername, loading: loadingIdUsername, error: errorIdUsername} = useQuery(GET_ID_BY_USERNAME, {
     variables:{
-        username: session?.user?.name
+      username: session?.user?.name
     }
   })
 
   const idUsername = dataIdUsername?.getIdByUsername?.id;
 
+  const {data: dataMark, error: errorMark, loading: loadingMark} = useQuery(GET_MARK, {
+    variables: {
+      username: session?.user?.name,
+      post_id: post?.id,
+    }
+  })
+
+  const marks = dataMark?.getMark.length;
+
   const [addMark] = useMutation(ADD_MARK)
   const [deleteMark] = useMutation(DELETE_MARK)
-
   const [deleteVote] = useMutation(DELETE_VOTE, {
     variables: {
       id: post?.id
     }
   })
-
   const [deletePost] = useMutation(DELETE_POST, {
     refetchQueries: [
       GET_ALL_POSTS, "getPostList"
@@ -64,6 +71,7 @@ const Post = ({post}: Props) => {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -96,7 +104,15 @@ const Post = ({post}: Props) => {
     const vote = votes?.find((vote) => vote.username == session?.user?.name)?.upvote
 
     setVote(vote)
+
+
   }, [data])
+
+  useEffect(() => {
+    if(marks > 0) {
+      setMarked(true)
+    }
+  }, [marks])
 
   const upVote = async(isUpvote: boolean) => {
     if(!session) {
@@ -131,11 +147,6 @@ const Post = ({post}: Props) => {
         id: notification
       })
     }
-    
-
-
-
-
   }
 
   const displayVotes = (data: any) => {
@@ -169,7 +180,8 @@ const Post = ({post}: Props) => {
           post_id: post?.id,
           username: session?.user?.name,
           usernameID: idUsername
-        }
+        },
+        refetchQueries: [GET_MARK, "getMark"]
       })
       return;
     } else {
@@ -179,7 +191,8 @@ const Post = ({post}: Props) => {
           post_id: post?.id,
           username: session?.user?.name,
           usernameID: idUsername
-        }
+        },
+        refetchQueries: [GET_MARK, "getMark"]
       })
       return;
     }
@@ -193,6 +206,8 @@ const Post = ({post}: Props) => {
       <Jelly size={50} color="#ff4501"/>
     </div>
   )
+
+
 
   return (
     <Link href={`/post/${post.id}`}>
@@ -241,7 +256,7 @@ const Post = ({post}: Props) => {
                 </div>             
                 <div onClick={(e) => markedFunction(e)} className="postButtons">
                   <BookmarkIcon className={`h-6 w-6 ${marked? "text-yellow-500" : ""}`}></BookmarkIcon>
-                  <p className={`${marked? "text-yellow-500" : ""}`}>0</p>
+                  <p className={`${marked? "text-yellow-500" : ""}`}>{marks}</p>
                   <p className={`hidden sm:inline ${marked ? "text-yellow-500" : ""}`}>Marks</p>
                 </div>              
                 <div className="postButtons">
