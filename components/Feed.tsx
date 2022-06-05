@@ -64,7 +64,7 @@ const Feed = ({topic}: Props) => {
   
 
   return (
-    <div className="-mt-24 space-y-4">
+    <div className="space-y-4">
       {
         posts? 
           <div className="flex-1 flex">
