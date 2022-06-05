@@ -115,7 +115,7 @@ const searchMsg = () => {
                         :
                         users?.map((user: any) => (
                             <div key={user.id}>
-                                <User user={user} globalStatement={false}/>
+                                <User user={user} globalStatement={false} index={0} following={false}/>
                             </div>
                         ))
                     }

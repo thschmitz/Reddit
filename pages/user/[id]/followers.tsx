@@ -48,7 +48,7 @@ const followers = () => {
                     :
                         user.username && followers?
                             <div className="w-full items-center justify-center p-10 text-xl">
-                                <div className="text-2xl bg-white rounded-lg max-w-fit mt-10 p-4">
+                                <div className="text-2xl text-center bg-white rounded-lg mt-10 p-4 flex-1 space-y-4 max-w-5xl my-7 mx-auto">
                                     {
                                         user?.username === session?.user?.name ?
                                             <h1>See <span className="text-red-400">{followers?.length} follower(es)</span> that <span className="underline">you</span> have</h1>
@@ -58,7 +58,7 @@ const followers = () => {
                                 </div>
                                 {
                                     followers?.map((follower: any) => (
-                                        <User user={follower} globalStatement={false} index={0}/>
+                                        <User user={follower} globalStatement={false} index={0} following={false}/>
                                     ))
                                 }
                                 

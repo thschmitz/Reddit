@@ -58,7 +58,7 @@ const following = () => {
                 {
                     postsMarked.length > 0?
                         <div>
-                            <h1 className="font-bold text-2xl mb-10 bg-white rounded-lg max-w-fit mt-10 p-4">See <span className="text-red-400">{postsMarked?.length} marked posts</span> that <b className="underline">you</b> have</h1>
+                            <h1 className="text-2xl text-center bg-white rounded-lg mt-10 p-4 flex-1 space-y-4 max-w-5xl my-7 mx-auto">See <span className="text-red-400">{postsMarked?.length} marked posts</span> that <b className="underline">you</b> have</h1>
                             {
                                 postsMarked?.map((post:any, index: any) => (
                                     <div key={index} className="mt-10">
