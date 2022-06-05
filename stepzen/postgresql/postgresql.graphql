@@ -359,6 +359,15 @@ type Query {
       """
       configuration: "postgresql_config"
     )
+  
+  getMarkById(id: ID!): [Mark]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "marks" where "usernameID" = $1
+      """
+      configuration: "postgresql_config"
+    )
 }
 
 type Mutation {

@@ -334,3 +334,12 @@ export const GET_MARK = gql`
         }
     }
 `
+
+export const GET_MARK_BY_ID = gql`
+    query MyQuery($id: ID!){
+        getMarkById(id: $id) {
+            id
+            post_id
+        }
+    }
+`

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {useRouter} from "next/router"
-import { GET_USER_BY_ID, GET_POST_BY_USERNAME, GET_ID_BY_USERNAME, GET_FOLLOW_BY_USERNAME_AND_ID, GET_ALL_FOLLOWERS, GET_FOLLOWING_BY_USERNAME } from '../../graphql/queries';
+import { GET_USER_BY_ID, GET_POST_BY_USERNAME, GET_MARK, GET_FOLLOW_BY_USERNAME_AND_ID, GET_ALL_FOLLOWERS, GET_FOLLOWING_BY_USERNAME, GET_MARK_BY_ID } from '../../graphql/queries';
 import { useQuery, useMutation } from '@apollo/client';
 import Avatar from '../../components/Avatar'
 import { Jelly } from '@uiball/loaders';
@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react';
 import { DELETE_FOLLOW, INSERT_FOLLOW } from '../../graphql/mutations';
 import Link from "next/link"
 import toast from 'react-hot-toast'
+import { BookmarkIcon } from '@heroicons/react/solid'
 
 const searchMsg = () => {
     const router = useRouter();
@@ -60,6 +61,15 @@ const searchMsg = () => {
             username: user?.username
         }
     })
+
+    const {data: dataMark, loading: loadingMark, error: errorMark} = useQuery(GET_MARK_BY_ID, {
+        variables: {
+            id: router?.query?.id
+        }
+    })
+
+    const marks = dataMark?.getMarkById?.length;
+    console.log("marks: ", marks)
 
     const following = dataFollowing?.getFollowing?.length;
     const posts: Post[] = post?.getPostByUsername;
@@ -151,10 +161,11 @@ const searchMsg = () => {
                                             <p className="font-bold text-xl">{following}</p>
                                         </div>
                                         <div className="flex items-center space-x-1">
-                                            <Link href={`/user/${router.query.id}/following`}>
+                                            <Link href={`/user/${router.query.id}/marks`}>
                                                 <p className="cursor-pointer">Marks •</p>
                                             </Link>
-                                            <p className="font-bold text-xl">{following}</p>
+                                            <p className="font-bold text-xl">{marks}</p>
+                                            <BookmarkIcon width={22} height={22} className="text-yellow-500"/>
                                         </div>
                                     </div>
 

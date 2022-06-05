@@ -1,4 +1,4 @@
-import { ArrowDownIcon, ArrowUpIcon, BookmarkIcon, ChatAltIcon, GiftIcon, ShareIcon, DotsHorizontalIcon, DotsVerticalIcon } from '@heroicons/react/solid'
+import { ArrowDownIcon, ArrowUpIcon, BookmarkIcon, ChatAltIcon, DotsHorizontalIcon } from '@heroicons/react/solid'
 import React, {useEffect, useState} from 'react'
 import Avatar from './Avatar'
 import TimeAgo from "react-timeago"
