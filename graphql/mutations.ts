@@ -127,3 +127,27 @@ export const ADD_SUBREDDIT = gql`
         }
     }
 `
+
+export const ADD_MARK = gql`
+    mutation MyMutation($post_id: ID!, $username: String!, $usernameID: ID!) {
+        insertMark(post_id: $post_id, username: $username, usernameID: $usernameID) {
+            id
+            created_at
+            post_id
+            username
+            usernameID
+        }
+    }
+`
+
+export const DELETE_MARK = gql`
+    mutation MyMutation($post_id: ID!, $username: String!, $usernameID: ID!) {
+        deleteMark(post_id: $post_id, username: $username, usernameID: $usernameID) {
+            id
+            created_at
+            post_id
+            username
+            usernameID
+        }
+    }
+`

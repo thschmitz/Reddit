@@ -92,6 +92,7 @@ const Feed = ({topic}: Props) => {
               {subreddits?.map((subreddit, i) => (
                 <SubredditRow topic={subreddit.topic} index={i} key={subreddit.id}/>
               ))}
+              <p className="text-md mb-1 p-4 pb-3 font-bold border-t flex">See global's posts in <Link href="/global"><div className="text-md font-bold -mt-1"><GlobeIcon className="icon"/></div></Link></p>
             </div>
           </div>
         :

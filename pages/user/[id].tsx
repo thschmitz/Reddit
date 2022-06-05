@@ -16,7 +16,7 @@ const searchMsg = () => {
     const {data:session} = useSession();
     const [liked, setLiked] = useState(false)
 
-    const {data: dataFollowers, loading: loadingFollowing, error: errorFolowwing} = useQuery(GET_FOLLOW_BY_USERNAME_AND_ID, {
+    const {data: dataFollowers, loading: loadingFollowing, error: errorFollowing} = useQuery(GET_FOLLOW_BY_USERNAME_AND_ID, {
         variables: {
             username: session?.user?.name,
             id: router?.query?.id
@@ -48,6 +48,7 @@ const searchMsg = () => {
     }, [followed])
 
     const user = data?.getUserById;
+
     const {data: dataFollowing} = useQuery(GET_FOLLOWING_BY_USERNAME, {
         variables: {
             username: user?.username,
@@ -165,7 +166,12 @@ const searchMsg = () => {
                             :
                             posts?.length > 0?
                             <div className="text-2xl bg-white rounded-lg max-w-fit mt-10 p-4">
-                                <h1>See <span className="text-red-400">{qtdPosts} post(s)</span> that <span className="underline">{user?.username}</span> has already created</h1>
+                                {
+                                    session?.user?.name === user.username ?
+                                        <h1>See <span className="text-red-400">{qtdPosts} post(s)</span> that <span>you</span> have already created</h1>
+                                    :
+                                        <h1>See <span className="text-red-400">{qtdPosts} post(s)</span> that <span className="underline">{user?.username}</span> has already created</h1>
+                                }
                             </div>
                     :
                             ""

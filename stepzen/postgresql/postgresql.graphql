@@ -6,6 +6,14 @@ type Comment {
   username: String
 }
 
+type Mark {
+  created_at: DateTime
+  id: ID!
+  post_id: ID
+  username: String
+  usernameID: ID
+}
+
 type Follow{
   created_at: DateTime
   id: ID!
@@ -342,6 +350,15 @@ type Query {
       table: "vote"
       configuration: "postgresql_config"
     )
+  
+  getMark(post_id: ID!, username: String!): Mark
+    @dbquery(
+      type: "postgresql"
+      table: """
+      select * from "marks" where "post_id" = $1 and "username" = $2
+      """
+      configuration: "postgresql_config"
+    )
 }
 
 type Mutation {
@@ -402,6 +419,26 @@ type Mutation {
       configuration: "postgresql_config"
     )
 
+  insertMark(username: String!, post_id: ID!, usernameID: ID!): Mark
+    @dbquery(
+      type: "postgresql"
+      table: "marks"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+
+  """
+  In this mutation example you can see how to do a mutation to delete data from the database.
+  """
+
+  deleteMark(username: String!, post_id: ID!, usernameID: ID!): Mark
+    @dbquery(
+      type: "postgresql"
+      table: "marks"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+
   deleteFollow(username: String!, following_id: ID!): Follow
     @dbquery(
       type: "postgresql"
@@ -410,9 +447,6 @@ type Mutation {
       configuration: "postgresql_config"
     )
 
-  """
-  In this mutation example you can see how to do a mutation to delete data from the database.
-  """
   deleteComment(
     post_id: ID!
 
@@ -438,7 +472,7 @@ type Mutation {
       table: "post"
       dml: DELETE
       configuration: "postgresql_config"
-    )
+    )    
 
   
 }

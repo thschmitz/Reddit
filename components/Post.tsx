@@ -7,7 +7,7 @@ import {Jelly} from "@uiball/loaders"
 import { useSession } from 'next-auth/react'
 import toast from 'react-hot-toast'
 import { GET_ALL_VOTES_BY_POST_ID, GET_ALL_POSTS, GET_ID_BY_USERNAME } from '../graphql/queries'
-import {DELETE_COMMENT, DELETE_POST, DELETE_VOTE} from "../graphql/mutations"
+import {ADD_MARK, DELETE_COMMENT, DELETE_MARK, DELETE_POST, DELETE_VOTE} from "../graphql/mutations"
 import {useQuery, useMutation} from "@apollo/client"
 import {ADD_VOTE} from "../graphql/mutations"
 import Button from '@mui/material/Button';
@@ -20,12 +20,32 @@ type Props = {
 
 const Post = ({post}: Props) => {
   const [vote, setVote] = useState<boolean>()
+  const [marked, setMarked] = useState<boolean>(false)
   const {data:session} = useSession()
   const [deleteComment] = useMutation(DELETE_COMMENT, {
     variables: {
       id: post?.id
     }
   })
+
+  const {data: dataId, loading: loadingId, error: errorId} = useQuery(GET_ID_BY_USERNAME, {
+    variables:{
+        username: post?.username
+    }
+  })
+
+  const id = dataId?.getIdByUsername?.id;
+
+  const {data: dataIdUsername, loading: loadingIdUsername, error: errorIdUsername} = useQuery(GET_ID_BY_USERNAME, {
+    variables:{
+        username: session?.user?.name
+    }
+  })
+
+  const idUsername = dataIdUsername?.getIdByUsername?.id;
+
+  const [addMark] = useMutation(ADD_MARK)
+  const [deleteMark] = useMutation(DELETE_MARK)
 
   const [deleteVote] = useMutation(DELETE_VOTE, {
     variables: {
@@ -64,13 +84,7 @@ const Post = ({post}: Props) => {
     }
   })
 
-  const {data: dataId, loading: loadingId, error: errorId} = useQuery(GET_ID_BY_USERNAME, {
-    variables:{
-        username: post?.username
-    }
-  })
 
-  const id = dataId?.getIdByUsername?.id;
 
   const [addVote] = useMutation(ADD_VOTE, {
     refetchQueries: [GET_ALL_VOTES_BY_POST_ID, "getVotesByPostId"]
@@ -139,6 +153,38 @@ const Post = ({post}: Props) => {
 
     return displayNumber;
   }
+
+  const markedFunction  = async (e:any) => {
+    e.preventDefault();
+
+    if(!session) {
+      toast("You will need to sign in to Mark!");
+      return;
+    }
+
+    if(marked) {
+      setMarked(false)
+      const {data: {deleteMark: newMark}} = await deleteMark({
+        variables: {
+          post_id: post?.id,
+          username: session?.user?.name,
+          usernameID: idUsername
+        }
+      })
+      return;
+    } else {
+      setMarked(true)
+      const {data: {insertMark: newMark}} = await addMark({
+        variables: {
+          post_id: post?.id,
+          username: session?.user?.name,
+          usernameID: idUsername
+        }
+      })
+      return;
+    }
+
+  }
     
 
   if(!post) 
@@ -192,29 +238,28 @@ const Post = ({post}: Props) => {
                   <ChatAltIcon className="h-6 w-6"></ChatAltIcon>
                   <p className="hidden sm:inline">{post.comments.length} Comments</p>
                   <p className="inline sm:hidden">{post.comments.length}</p>
-                </div>
-                <div className="postButtons">
-                  <GiftIcon className="h-6 w-6"></GiftIcon>
-                  <p className="hidden sm:inline">Award</p>
+                </div>             
+                <div onClick={(e) => markedFunction(e)} className="postButtons">
+                  <BookmarkIcon className={`h-6 w-6 ${marked? "text-yellow-500" : ""}`}></BookmarkIcon>
+                  <p className={`${marked? "text-yellow-500" : ""}`}>0</p>
+                  <p className={`hidden sm:inline ${marked ? "text-yellow-500" : ""}`}>Marks</p>
                 </div>              
                 <div className="postButtons">
-                  <ShareIcon className="h-6 w-6"></ShareIcon>
-                  <p className="hidden sm:inline">Shares</p>
-                </div>              
-                <div className="postButtons">
-                  <BookmarkIcon className="h-6 w-6"></BookmarkIcon>
-                  <p className="hidden sm:inline">Marks</p>
-                </div>              
-                <div className="postButtons">
-                <Button
-                  id="basic-button"
-                  aria-controls={open ? 'basic-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? 'true' : undefined}
-                  onClick={handleClick}
-                >
-                  <DotsHorizontalIcon className="h-6 w-6 text-gray-400"></DotsHorizontalIcon>
-                </Button>
+                {
+                  post?.username === session?.user?.name ?
+                    <Button
+                    id="basic-button"
+                    aria-controls={open ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={handleClick}
+                  >
+                    <DotsHorizontalIcon className="h-6 w-6 text-gray-400"></DotsHorizontalIcon>
+                  </Button>
+                  :
+                  ""
+                }
+
                 <Menu
                   id="basic-menu"
                   anchorEl={anchorEl}
@@ -232,8 +277,7 @@ const Post = ({post}: Props) => {
                       </div>
                       
                     :
-                      <MenuItem onClick={handleClose}>Edit Post</MenuItem>
-
+                    ""
                   }
 
                 </Menu>
