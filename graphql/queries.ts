@@ -375,3 +375,11 @@ export const GET_MARK_BY_ID = gql`
         }
     }
 `
+
+export const GET_MARKS_BY_POST_ID = gql`
+    query MyQuery($post_id: ID!){
+        getMarksByPostId(post_id: $post_id) {
+            id
+        }
+    }
+`

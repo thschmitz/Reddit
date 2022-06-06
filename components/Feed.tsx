@@ -14,7 +14,6 @@ type Props = {
 
 const Feed = ({topic}: Props) => {
   const {data: session} = useSession();
-  const [nothing, setNothing] = useState(false)
 
   const {data: dataId, error: errorId} = useQuery(GET_FOLLOWER_ID, {
     variables: {
@@ -56,15 +55,8 @@ const Feed = ({topic}: Props) => {
 
   var soma = 0;
 
-  useEffect(() => {
-    if(soma === posts?.length){
-      setNothing(true)
-    }
-  }, [soma])
-  
-
   return (
-    <div className="space-y-4">
+    <div className="mt-12 space-y-4">
       {
         posts? 
           <div className="flex-1 flex">
@@ -77,20 +69,11 @@ const Feed = ({topic}: Props) => {
                 :
                 dataIdFollowing?.map((id: any) => (
                     posts?.map((post:any) => (
-                      post?.usernameID === id.following_id ? <Post key={post.id} post={post} /> : <div className="invisible">{soma+=1}</div>
+                      post?.usernameID === id.following_id ? <Post key={post.id} post={post} /> : <div className="invisible"></div>
                     ))
                 ))
               }
             </div>  
-              {
-                nothing ? 
-                <div className="text-center m-20 items-center mr-52">
-                  <h1 className="text-2xl font-bold">Follow someone to see their posts</h1>
-                  <h1 className="text-xl">Go to <b className="underline hover:bg-red-400 rounded-full hover:p-1"><Link href="/global">Global</Link></b> and find some friends</h1>
-                </div>
-                :
-                ""
-              }
             
             <div className="sticky top-44 mx-5 hidden h-fit min-w-[300px] rounded-md border border-gray-300 bg-white lg:inline">
               <p className="text-md mb-1 p-4 pb-3 font-bold">Top Communities</p>
