@@ -488,7 +488,7 @@ type Mutation {
       dml: DELETE
       configuration: "postgresql_config"
     )
-  
+
   deletePost(id: ID!): Post
     @dbquery(
       type: "postgresql"

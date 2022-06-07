@@ -121,7 +121,7 @@ const Post = ({post}: Props) => {
     }
     const notification = toast.loading("Liking...");
 
-    if(vote && isUpvote) {     
+    if(vote && isUpvote || vote && !isUpvote) {     
       toast.error("You have already voted", {
         id: notification
       });
@@ -210,7 +210,6 @@ const Post = ({post}: Props) => {
 
 
   return (
-    <Link href={`/post/${post.id}`}>
       <div className="flex rounded-md cursor-pointer border border-gray-300 bg-white shadow-sm hover:border hover:border-gray-600">
           {/*Votes*/}
           <div className="flex flex-col items-center justify-start space-y-1 rounded-l-md bg-gray-50 p-4 text-gray-400">
@@ -218,6 +217,7 @@ const Post = ({post}: Props) => {
               <p className="text-xs font-bold text-black">{displayVotes(data)}</p>
               <ArrowDownIcon onClick={() => upVote(false)} className={`voteButtons hover:text-red-400 ${vote == false && "text-blue-400"}`}/>
           </div>
+          <Link href={`/post/${post.id}`}>
 
           <div className="p-3 pb-1">
               {/*Header*/}
@@ -300,8 +300,8 @@ const Post = ({post}: Props) => {
                 </div>
               </div>
           </div>
-      </div>
     </Link>
+      </div>
     
   )
 }
