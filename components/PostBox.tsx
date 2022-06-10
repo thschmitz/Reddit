@@ -32,7 +32,8 @@ const PostBox = ({subreddit}: Props) => {
         }
     })
 
-    const mySelfIdValue = mySelfId?.getIdByUsername.id;
+    const mySelfIdValue = mySelfId?.getIdByUsername
+    console.log("idValue: ", mySelfIdValue)
 
     const [addPost] = useMutation(ADD_POST, {
         refetchQueries: [

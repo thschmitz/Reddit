@@ -27,7 +27,7 @@ const Feed = ({topic}: Props) => {
     }
   })
 
-  const idSession = dataSession?.getIdByUsername.id;
+  const idSession = dataSession?.getIdByUsername?.id;
 
   console.log("idSession: ", idSession)
 
