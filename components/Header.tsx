@@ -121,7 +121,29 @@ const Header = () => {
                         <PlusIcon className="icon-sm"/>
                         <SpeakerphoneIcon className="icon-sm"/>
                     </form>
-
+                    <hr></hr>
+                    {
+                        session?
+                        <div onClick={() => signOut()} className="icon-sm">
+                            <div className="relative h-5 w-5 flex-shrink-0">
+                                <Image objectFit="contain" layout="fill" src="https://links.papareact.com/23l"  alt="" />
+                            </div>
+                            <div className="flex-1 text-xs">
+                                <p className="flex justify-center">Logged</p>
+                                <p className="flex justify-center">{session?.user?.name?.substring(0,2)}...</p>
+                            </div>
+                        </div>
+                        :
+                        <div onClick={() => signIn()} className="icon-sm">
+                            <div className="relative h-5 w-5 flex-shrink-0">
+                                <Image objectFit="contain" layout="fill" src="https://links.papareact.com/23l"  alt="" />
+                            </div>
+                            <div className="text-xs flex-1">
+                                <p className="text-gray-400 flex justify-center">SignIn</p>
+                            </div>
+                            
+                        </div>
+                    }
                 </Drawer>
                 {
                     session?(
