@@ -49,7 +49,7 @@ const User = ({user, globalStatement, index, following}: Props) => {
                         <div className="items-center space-x-2 flex">
                             <Avatar seed={following? username?.username : user?.username} /> {/* subreddit[0] because it returns an array with the info*/}
                             <div>{following? username?.username : user?.username  }</div>
-                            <p className="pl-20"><span className="dateCreated">Entered in: </span>{data}<span className="dateCreated">UTC</span></p>
+                            <p className="pl-20 hidden sm:inline"><span className="dateCreated">Entered in: </span>{data}<span className="dateCreated">UTC</span></p>
                         </div>
                     </div>
                 </Link>
