@@ -28,6 +28,8 @@ const Post = ({post}: Props) => {
     }
   })
 
+  
+
   const {data: dataId, loading: loadingId, error: errorId} = useQuery(GET_ID_BY_USERNAME, {
     variables:{
         username: post?.username
