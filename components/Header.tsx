@@ -67,7 +67,6 @@ const Header = () => {
         if(!session) return;
         if(users && session){
             sendUser()   
-
         }
     }, [session])
 
