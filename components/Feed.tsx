@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react'
-import { GET_ALL_POSTS, GET_ALL_POSTS_BY_TOPIC, GET_SUBREDDITS_WITH_LIMIT, GET_FOLLOWER_ID, GET_ID_BY_USERNAME } from '../graphql/queries'
-import {useQuery} from "@apollo/client"
-import Post from "./Post"
-import {Jelly} from "@uiball/loaders"
-import SubredditRow from "../components/SubredditRow"
+import { useQuery } from "@apollo/client"
+import { GlobeIcon } from "@heroicons/react/outline"
+import { Jelly } from "@uiball/loaders"
 import { useSession } from 'next-auth/react'
-import {GlobeIcon} from "@heroicons/react/outline"
 import Link from "next/link"
+import React, { useEffect, useState } from 'react'
+import SubredditRow from "../components/SubredditRow"
+import { GET_ALL_POSTS, GET_ALL_POSTS_BY_TOPIC, GET_FOLLOWER_ID, GET_ID_BY_USERNAME, GET_SUBREDDITS_WITH_LIMIT } from '../graphql/queries'
+import Post from "./Post"
 
 type Props = {
   topic?: string,
@@ -53,12 +53,12 @@ const Feed = ({topic}: Props) => {
 
   const subreddits: Subreddit[] = subredditData?.getSubredditListLimit;
 
-  var soma = 0;
 
   return (
     <div className="mt-12 space-y-4">
       {
-        posts? 
+        idSession?
+          posts? 
           <div className="flex-1 flex">
             <div>
               {
@@ -83,10 +83,18 @@ const Feed = ({topic}: Props) => {
               <p className="text-md mb-1 p-4 pb-3 font-bold border-t flex">See global's posts in <Link href="/global"><div className="text-md font-bold -mt-1"><GlobeIcon className="icon"/></div></Link></p>
             </div>
           </div>
+          :
+          <div className="flex w-full items-center mt-52 justify-center p-10 text-xl">
+            {
+              <Jelly size={50} color="#ff4501"/>
+            }
+          </div>
         :
-        <div className="flex w-full items-center mt-52 justify-center p-10 text-xl">
-          <Jelly size={50} color="#ff4501"/>
-        </div>
+          <div className="flex flex-col w-full items-center mt-52 justify-center p-10 text-xl">
+              <h1>Login to see your followers's content</h1>
+              <button className="bg-red-400 p-3 rounded-2xl mt-4 text-white">Sign in</button>
+          </div>
+        
       }
 
 
