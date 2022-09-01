@@ -7,15 +7,8 @@ import Link from "next/link"
 import {useQuery, useMutation} from "@apollo/client"
 import { GET_ALL_USERS, SEARCH_USERNAME } from '../graphql/queries'
 import { ADD_USER } from '../graphql/mutations'
-import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+
 
 const Header = () => {
     const {data: session} = useSession();
