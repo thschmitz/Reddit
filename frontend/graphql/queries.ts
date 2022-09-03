@@ -1,4 +1,4 @@
-import {gql} from "@apollo/client"
+import { gql } from "@apollo/client"
 
 export const GET_SUBREDDIT_BY_TOPIC = gql`
     query MyQuery($topic: String!) {
@@ -16,15 +16,17 @@ export const GET_ALL_USERS = gql`
             created_at
             id
             username
+            email
+            senha
             posts {
-            title
-            body
+                title
+                body
             }
             followers {
-            username
+                username
+            }
         }
     }
-}
 `
 
 export const GET_ALL_USERS_WITH_LIMIT = gql`

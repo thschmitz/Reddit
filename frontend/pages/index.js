@@ -15,7 +15,6 @@ export const getServerSideProps = withSession((ctx) => {
 
 const Home = (props) => {
 
-
   const session = props.data.usuarioInfo
 
   return (

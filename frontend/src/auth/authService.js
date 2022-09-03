@@ -1,3 +1,4 @@
+
 import { AtualizaToken, CreateAccount, CreatePost, Login, Session } from "../infra/HttpClient.js";
 import { tokenService } from "./tokenService.js";
 
@@ -22,6 +23,8 @@ export const authService = {
             body: body,
         }).then(respostaDoServidor => {
             console.log("respostaSession: ", respostaDoServidor)
+
+
             return respostaDoServidor;
         })
     },

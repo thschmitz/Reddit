@@ -35,6 +35,8 @@ type User {
   created_at: DateTime
   id: ID!
   username: String
+  email: String
+  senha: String
   posts: [Post]
     @materializer(
       query: "getPostByUsername",
@@ -426,7 +428,7 @@ type Mutation {
       configuration: "postgresql_config"
     )
   
-  insertUser(username: String!) : User
+  insertUser(username: String!, email: String!, senha: String!, id: ID!) : User
     @dbquery(
       type: "postgresql"
       table: "users"

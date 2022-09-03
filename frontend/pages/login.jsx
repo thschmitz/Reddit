@@ -1,13 +1,16 @@
+import { useMutation } from "@apollo/client";
 import { LockClosedIcon } from '@heroicons/react/solid';
 import Head from 'next/head';
 import { useRouter } from "next/router";
 import React, { useState } from 'react';
+import { ADD_USER } from '../graphql/mutations';
 import { authService } from "../src/auth/authService";
 import { tokenService } from "../src/auth/tokenService";
 
 export default function Home() {
   const router = useRouter();
   const token = tokenService.getAccessToken(null)
+  const [addUser] = useMutation(ADD_USER)
 
   /*
   if(token){
@@ -61,6 +64,19 @@ export default function Home() {
   function handleLogin() {
     document.getElementById("criar").style.display = "none";
     document.getElementById("login").style.display = "block";
+  }
+
+  // Adding the informations into Supabase
+
+  function handleAddSupabase(username, email, senha, id) {
+    addUser({
+      variables: {
+        username: username, 
+        email: email,
+        senha: senha,
+        id: id
+      }
+    })
   }
 
   return (
@@ -176,12 +192,12 @@ export default function Home() {
                 email: valuesCriar.email,
                 senha: valuesCriar.senha
               }).then(async (resposta) => {
-                console.log("RespostaIndex: ", resposta)
+                console.log("RespostaIndex: ", resposta) // resposta.nome, resposta.email, resposta.senhaHash
+                handleAddSupabase(resposta.nome, resposta.email, resposta.senhaHash, resposta.id)
                 await authService.login({
                   email:valuesCriar.email,
                   senha:valuesCriar.senha
                 })
-                window.location.reload();
               }) 
             }}>
               <input type="hidden" name="remember" defaultValue="true" />

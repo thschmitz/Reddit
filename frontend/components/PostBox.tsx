@@ -1,16 +1,14 @@
+import { useMutation, useQuery } from "@apollo/client"
+import { LinkIcon, PhotographIcon } from "@heroicons/react/outline"
 import { useSession } from 'next-auth/react'
-import React, {useState} from 'react'
-import Avatar from "./Avatar"
-import {LinkIcon, PhotographIcon} from "@heroicons/react/outline"
-import {useForm} from "react-hook-form"
-import { ADD_POST } from '../graphql/mutations'
-import {useMutation} from "@apollo/client"
-import client from "../apollo-client"
-import { GET_ALL_POSTS, GET_SUBREDDIT_BY_TOPIC, GET_ID_BY_USERNAME } from '../graphql/queries'
-import { ADD_SUBREDDIT } from '../graphql/mutations'
-import toast from 'react-hot-toast'
-import {useQuery} from "@apollo/client"
 import Link from "next/link"
+import React, { useState } from 'react'
+import { useForm } from "react-hook-form"
+import toast from 'react-hot-toast'
+import client from "../apollo-client"
+import { ADD_POST, ADD_SUBREDDIT } from '../graphql/mutations'
+import { GET_ALL_POSTS, GET_ID_BY_USERNAME, GET_SUBREDDIT_BY_TOPIC } from '../graphql/queries'
+import Avatar from "./Avatar"
 
 type FormData= {
     postTitle: string,
@@ -51,8 +49,6 @@ const PostBox = ({subreddit}: Props) => {
     } = useForm<FormData>()
 
     const onSubmit = handleSubmit( async(formData) => {
-
-
 
         const notification = toast.loading("Creating new Post...");
 

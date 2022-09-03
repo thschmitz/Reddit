@@ -1,4 +1,4 @@
-import {gql} from "@apollo/client"
+import { gql } from "@apollo/client"
 
 export const ADD_COMMENT = gql`
     mutation MyMutation($post_id: ID!, $username: String!, $text: String!){
@@ -13,10 +13,12 @@ export const ADD_COMMENT = gql`
 `
 
 export const ADD_USER = gql`
-    mutation MyMutation($username: String!){
-        insertUser(username: $username){
+    mutation MyMutation($username: String!, $email: String!, $senha: String!, $id: ID!){
+        insertUser(username: $username, email: $email, senha: $senha, id: $id){
             id
             username
+            email
+            senha
             created_at
         }
     }
