@@ -68,7 +68,7 @@ export default function Home() {
           <title>Home</title>
         </Head>
 
-        <div id="login" style={{display:"block"}} className="max-w-sm w-full space-y-8">
+        <div id="login" style={{display:"block"}} className="max-w-sm w-full fixed">
           <div>
             <img
               className="mx-auto h-12 w-auto"

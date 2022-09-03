@@ -19,7 +19,6 @@ export const authService = {
     },
 
     async criar(body) {
-        console.log(body)
         return await CreateAccount(`${process.env.NEXT_PUBLIC_BACKEND_URL}/usuario`, {
             method: "POST",
             body: body,

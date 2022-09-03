@@ -118,8 +118,6 @@ export async function CreateAccount(fetchUrl, fetchOptions) {
     body: formBody
   };
 
-  console.log(options.body)
-
   return fetch(fetchUrl, options)
     .then((respostaDoServidor) => {
       console.log("RespostaFRONT: ", respostaDoServidor)
@@ -132,8 +130,6 @@ export async function CreatePost(fetchUrl, fetchOptions) {
     'titulo': `${fetchOptions.body.title}`,
     'conteudo': `${fetchOptions.body.content}`,
   };
-
-  console.log("Details: ", details)
 
   var formBody = [];
   for (var property in details) {
