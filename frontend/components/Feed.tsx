@@ -92,7 +92,7 @@ const Feed = ({topic}: Props) => {
         :
           <div className="flex flex-col w-full items-center mt-52 justify-center p-10 text-xl">
               <h1>Login to see your followers's content</h1>
-              <button className="bg-red-400 p-3 rounded-2xl mt-4 text-white">Sign in</button>
+              <Link href="/login"><button className="bg-red-400 p-3 rounded-2xl mt-4 text-white">Sign in</button></Link>
           </div>
         
       }
