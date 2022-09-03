@@ -1,29 +1,25 @@
 import { useMutation, useQuery } from "@apollo/client"
 import { BellIcon, ChatIcon, GlobeIcon, PlusIcon, SparklesIcon, SpeakerphoneIcon, StarIcon, VideoCameraIcon } from "@heroicons/react/outline"
-import { ChevronDownIcon, HomeIcon, MenuIcon, SearchIcon } from "@heroicons/react/solid"
+import { MenuIcon, SearchIcon } from "@heroicons/react/solid"
 import Drawer from '@mui/material/Drawer'
-import { signIn, signOut, useSession } from 'next-auth/react'
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from 'react'
 import { ADD_USER } from '../graphql/mutations'
 import { GET_ALL_USERS, SEARCH_USERNAME } from '../graphql/queries'
+import { tokenService } from "../src/auth/tokenService"
 
-type Props = {
-    user?: {id: number, nome: string, email: string, senhaHash: string, emailVerificado: number},
-}
-
-const Header = ({user}: Props) => {
-    const {data: session} = useSession();
+const Header = (props:any) => {
+    const session = props
+    console.log("USUARIO: ", props)
     const {data, loading} = useQuery(GET_ALL_USERS);
-    console.log("USUARIO: ", user)
     const [search, setSearch] = useState("")
     const [addUser] = useMutation(ADD_USER);
     const router = useRouter();
     const {data: dataUser, loading: loadingUser, error} = useQuery(SEARCH_USERNAME, {
         variables: {
-            username: session?.user?.name
+            username: session?.nome
         }
     })
 
@@ -52,7 +48,7 @@ const Header = ({user}: Props) => {
             console.log("ADICIONADO")
             addUser({
                 variables: {
-                    username: session?.user?.name
+                    username: session?.nome
                 }
             })
         }
@@ -64,6 +60,12 @@ const Header = ({user}: Props) => {
 
     function handleLogin() {
         router.push("/login");
+    }
+
+    function handleLogout() {
+        tokenService.deleteAccessToken();
+        tokenService.deleteRefreshToken();
+        router.reload();
     }
         
     useEffect(() => {
@@ -126,13 +128,12 @@ const Header = ({user}: Props) => {
                 <hr></hr>
                 {
                     session?
-                    <div onClick={() => signOut()} className="icon-sm">
+                    <div onClick={() => handleLogout()} className="icon-sm">
                         <div className="relative h-5 w-5 flex-shrink-0">
                             <Image objectFit="contain" layout="fill" src="https://links.papareact.com/23l"  alt="" />
                         </div>
                         <div className="flex-1 text-xs">
                             <p className="flex justify-center">Logged</p>
-                            <p className="flex justify-center">{session?.user?.name?.substring(0,2)}...</p>
                         </div>
                     </div>
                     :
@@ -149,15 +150,13 @@ const Header = ({user}: Props) => {
             </Drawer>
             {
                 session?(
-                    <div onClick={() => signOut()} className="hidden lg:flex items-center cursor-pointer space-x-2 border border-gray-100 p-2">
+                    <div onClick={() => handleLogout()} className="hidden lg:flex items-center cursor-pointer space-x-2 border border-gray-100 p-2">
                         <div className="relative h-5 w-5 flex-shrink-0">
                             <Image objectFit="contain" layout="fill" src="https://links.papareact.com/23l"  alt="" />
                         </div>
                         <div className="flex-1 text-xs">
-                            <p className="truncate">{session?.user?.name}</p>
-                            <p className="text-gray-400">1 Karma</p>
+                            <p className="text-gray-400">Logout</p>
                         </div>
-                        <ChevronDownIcon className="h-5 flex-schrink-0 text-gray-400"/>
                     </div>
                 ) : (
                     <div onClick={() => handleLogin()} className="hidden lg:flex items-center cursor-pointer space-x-2 border border-gray-100 p-2">

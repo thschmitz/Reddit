@@ -17,13 +17,13 @@ export function withSession(funcao) {
         console.log("Session: ", modifiedCtx.req.session);
         return funcao(modifiedCtx)
       } else {
-        return ctx.redirect("/?error=401");
+        return ctx.redirect("/login");
       }
     } catch (error) {
       return {
         redirect: {
           permanent: false,
-          destination: "/?error=401",
+          destination: "/login",
         },
       };
     }
@@ -47,7 +47,7 @@ export function posts(funcao) {
         }
         return funcao(modifiedCtx)
       } else {
-        return ctx.redirect("/?error=401");
+        return ctx.redirect("/login");
       }
 
     } catch (error) {
@@ -55,7 +55,7 @@ export function posts(funcao) {
       return {
         redirect: {
           permanent: false,
-          destination: "/?error=401",
+          destination: "/login",
         },
       };
     }

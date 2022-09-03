@@ -5,7 +5,6 @@ import { withSession } from "../src/auth/session";
 
 export const getServerSideProps = withSession((ctx) => {
   const data = ctx.req.session;
-  console.log("Data: ", data)
   return {
     props: {
       data,
@@ -20,7 +19,7 @@ const Home = (props) => {
   return (
     <div className="max-w-5xl my-7 mx-auto">
       <Head>
-        <link href="https://www.redditstatic.com/icon.png"></link>
+        <link href="https://links.papareact.com/23l"></link>
         <title>Reddit</title>
       </Head>
 
