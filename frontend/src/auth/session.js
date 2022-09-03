@@ -13,12 +13,12 @@ export function withSession(funcao) {
             session,
           }
         }
+
+        console.log("Session: ", modifiedCtx.req.session);
         return funcao(modifiedCtx)
       } else {
         return ctx.redirect("/?error=401");
       }
-
-
     } catch (error) {
       return {
         redirect: {

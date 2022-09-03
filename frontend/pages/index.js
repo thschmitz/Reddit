@@ -1,20 +1,22 @@
-import type { NextPage } from 'next';
 import Head from 'next/head';
 import Feed from "../components/Feed";
 import PostBox from "../components/PostBox";
 import { withSession } from "../src/auth/session";
 
-export const getServerSideProps = withSession((ctx:any) => {
+export const getServerSideProps = withSession((ctx) => {
+  const data = ctx.req.session;
+  console.log("Data: ", data)
   return {
     props: {
-      session: ctx.req.session,
+      data,
     }
   }
 })
 
-const Home: NextPage = (props:any) => {
+const Home = (props) => {
 
-  console.log("props.session: ", props);
+
+  const session = props.data.usuarioInfo
 
   return (
     <div className="max-w-5xl my-7 mx-auto">
@@ -26,7 +28,7 @@ const Home: NextPage = (props:any) => {
       <PostBox/>
 
       <div className="flex-1">
-        <Feed />
+        <Feed/>
 
       </div>
     </div>

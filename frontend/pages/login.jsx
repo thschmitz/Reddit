@@ -9,9 +9,11 @@ export default function Home() {
   const router = useRouter();
   const token = tokenService.getAccessToken(null)
 
+  /*
   if(token){
     router.push("/")
   }
+  */
 
   const [values, setValues] = useState({
     email: "thomas.henrique.schmitz@gmail.com",
