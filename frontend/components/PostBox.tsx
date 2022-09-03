@@ -19,19 +19,20 @@ type FormData= {
 
 type Props = {
     subreddit?: string,
+    user?: {id: number, nome: string, email: string, senhaHash: string, emailVerificado: number},
 }
 
-const PostBox = ({subreddit}: Props) => {
-    const {data:session} = useSession();
+const PostBox = ({subreddit, user}: Props) => {
+    const session = user;
 
+    /*
     const {data: mySelfId, error: MySelfError} = useQuery(GET_ID_BY_USERNAME, {
         variables: {
             username: session?.user?.name
         }
-    })
+    })*/
 
-    const mySelfIdValue = mySelfId?.getIdByUsername
-    console.log("idValue: ", mySelfIdValue)
+    const mySelfIdValue = user?.id
 
     const [addPost] = useMutation(ADD_POST, {
         refetchQueries: [
@@ -62,14 +63,14 @@ const PostBox = ({subreddit}: Props) => {
                 }
             })
 
+            /*
             const {data: {getIdByUsername}} = await client.query({
                 query: GET_ID_BY_USERNAME,
                 variables: {
-                    username: session?.user?.name
+                    username: user?.nome
                 }
-            })
+            })*/
 
-            console.log("userIdPost: ", getIdByUsername.id)
             const subredditExists = getSubredditListByTopic.length > 0;
 
             if(!subredditExists) {
@@ -89,8 +90,8 @@ const PostBox = ({subreddit}: Props) => {
                         image: image,
                         subreddit_id: newSubreddit.id,
                         title: formData.postTitle,
-                        username: session?.user?.name,
-                        usernameID: getIdByUsername.id
+                        username: user?.nome,
+                        usernameID: user?.id
                     }
                 })
 
@@ -105,8 +106,8 @@ const PostBox = ({subreddit}: Props) => {
                         image: image,
                         subreddit_id: getSubredditListByTopic[0].id,
                         title: formData.postTitle,
-                        username: session?.user?.name,
-                        usernameID: getIdByUsername.id
+                        username: user?.nome,
+                        usernameID: user?.id
                     }
                 })
 
@@ -134,7 +135,7 @@ const PostBox = ({subreddit}: Props) => {
     return (
         <form onSubmit={onSubmit} className="sticky top-20 z-50 rounded-md border border-gray-300 bg-white p-2">
             <div className="flex items-center space-x-3">
-                <Link href={`/user/${mySelfIdValue?.id}`}><div className="cursor-pointer"><Avatar/></div></Link>
+                <Link href={`/user/${mySelfIdValue}`}><div className="cursor-pointer"><Avatar seed={user? user?.nome : ""}/></div></Link>
                 <input {...register("postTitle", {required:true})} disabled={!session} className="rounded-md flex-1 bg-gray-50 p-2 pl-5 outline-none" type="text" placeholder={session? subreddit ? `Create a post with r/${subreddit}` : "Create a post by entering a title!" : "Sign in to post!" }/>
                 <PhotographIcon onClick={() => setImageBoxOpen(!imageBoxOpen)} className={`h-6 text-gray-400 cursor-pointer ${imageBoxOpen && 'text-blue-300'}`}/>
                 <LinkIcon className="h-6 text-gray-400 cursor-pointer"/>

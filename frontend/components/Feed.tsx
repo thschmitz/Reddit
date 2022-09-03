@@ -10,28 +10,31 @@ import Post from "./Post"
 
 type Props = {
   topic?: string,
+  user?: {id: number, nome: string, email: string, senhaHash: string, emailVerificado: number},
 }
 
-const Feed = ({topic}: Props) => {
+const Feed = ({topic, user}: Props) => {
+
+  console.log("USER: ", user)
+
   const {data: session} = useSession();
 
   const {data: dataId, error: errorId} = useQuery(GET_FOLLOWER_ID, {
     variables: {
-      username: session?.user?.name
+      username: user?.nome
     }
   })
+  const dataIdFollowing = dataId?.getFollowerId;
 
+  /*
   const {data: dataSession, error: errorSession} = useQuery(GET_ID_BY_USERNAME, {
     variables: {
       username: session?.user?.name
     }
-  })
+  })*/
 
-  const idSession = dataSession?.getIdByUsername?.id;
+  const idSession = user?.id;
 
-  console.log("idSession: ", idSession)
-
-  const dataIdFollowing = dataId?.getFollowerId;
   console.log("dataIdFollowing: ", dataIdFollowing);
 
   const {data, error} = !topic ? useQuery(GET_ALL_POSTS) : useQuery(GET_ALL_POSTS_BY_TOPIC, {
@@ -40,9 +43,6 @@ const Feed = ({topic}: Props) => {
     }
   })
   const posts: Post[] = !topic? data?.getPostList : data?.getPostListByTopic;
-
-
-  console.log("posts: ", posts)
 
 
   const {data: subredditData} = useQuery(GET_SUBREDDITS_WITH_LIMIT, {
@@ -68,9 +68,9 @@ const Feed = ({topic}: Props) => {
                 ))
                 :
                 dataIdFollowing?.map((id: any) => (
-                    posts?.map((post:any) => (
-                      post?.usernameID === id.following_id ? <Post key={post.id} post={post} /> : <div className="invisible"></div>
-                    ))
+                  posts?.map((post:any) => (
+                    post?.usernameID === id.following_id ? <Post key={post.id} post={post} /> : <div className="invisible"></div>
+                  ))
                 ))
               }
             </div>  
@@ -84,6 +84,7 @@ const Feed = ({topic}: Props) => {
             </div>
           </div>
           :
+          
           <div className="flex w-full items-center mt-52 justify-center p-10 text-xl">
             {
               <Jelly size={50} color="#ff4501"/>

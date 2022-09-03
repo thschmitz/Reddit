@@ -24,10 +24,10 @@ const Home = (props) => {
         <title>Reddit</title>
       </Head>
 
-      <PostBox/>
+      <PostBox user={session}/>
 
       <div className="flex-1">
-        <Feed/>
+        <Feed user={session}/>
 
       </div>
     </div>

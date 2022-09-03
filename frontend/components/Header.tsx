@@ -10,9 +10,14 @@ import React, { useEffect, useState } from 'react'
 import { ADD_USER } from '../graphql/mutations'
 import { GET_ALL_USERS, SEARCH_USERNAME } from '../graphql/queries'
 
-const Header = () => {
+type Props = {
+    user?: {id: number, nome: string, email: string, senhaHash: string, emailVerificado: number},
+}
+
+const Header = ({user}: Props) => {
     const {data: session} = useSession();
     const {data, loading} = useQuery(GET_ALL_USERS);
+    console.log("USUARIO: ", user)
     const [search, setSearch] = useState("")
     const [addUser] = useMutation(ADD_USER);
     const router = useRouter();

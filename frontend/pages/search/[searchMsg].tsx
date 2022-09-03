@@ -1,12 +1,11 @@
-import React, {useState} from 'react'
-import {useRouter} from "next/router"
-import {GET_ALL_POST_WITH_SEARCH} from "../../graphql/queries"
-import {useQuery} from "@apollo/client"
+import { useQuery } from "@apollo/client"
+import { Jelly } from "@uiball/loaders"
+import { useRouter } from "next/router"
+import React, { useState } from 'react'
 import Post from "../../components/Post"
-import {Jelly} from "@uiball/loaders"
-import { GET_SUBREDDITS_WITH_LIMIT, GET_ALL_USERS, GET_ALL_USERS_BY_SEARCH } from '../../graphql/queries'
 import SubredditRow from "../../components/SubredditRow"
 import User from "../../components/User"
+import { GET_ALL_POST_WITH_SEARCH, GET_ALL_USERS, GET_ALL_USERS_BY_SEARCH, GET_SUBREDDITS_WITH_LIMIT } from "../../graphql/queries"
 
 const searchMsg = () => {
     const router = useRouter();
@@ -53,24 +52,31 @@ const searchMsg = () => {
             <div className="flex w-full items-center justify-center p-3">
                 {
                     postButton?
-                    <div className="optionButtons bg-red-400 text-white">
-                        <button>Posts</button>
-                    </div>
+                    <button>
+                        <div className="optionButtons bg-red-400 text-white">
+                            Posts
+                        </div>
+                    </button>
                     :
-                    <div className="optionButtons">
-                        <button onClick={handleSubmitPost}>Posts</button>
-                    </div>
+                    <button onClick={handleSubmitPost}>
+                        <div className="optionButtons">
+                            Posts
+                        </div>
+                    </button>
                 }
                 {
                     userButton?
-
-                    <div className="optionButtons bg-red-400 text-white">
-                        <button>Users</button>
-                    </div>
+                    <button>
+                        <div className="optionButtons bg-red-400 text-white">
+                            Users
+                        </div>
+                    </button>
                     :
-                    <div className="optionButtons">
-                        <button onClick={handleSubmitUsers}>Users</button>
-                    </div>
+                    <button onClick={handleSubmitUsers}>
+                        <div className="optionButtons">
+                            Users
+                        </div>
+                    </button>
                 }
 
             </div>
@@ -113,11 +119,16 @@ const searchMsg = () => {
                             <Jelly size={50} color="#ff4501"/>
                         </div>
                         :
-                        users?.map((user: any) => (
-                            <div key={user.id}>
-                                <User user={user} globalStatement={false} index={0} following={false}/>
-                            </div>
-                        ))
+                        users.length !== 0?
+                            users?.map((user: any) => (
+                                <div key={user.id}>
+                                    <User user={user} globalStatement={false} index={0} following={false}/>
+                                </div>
+                            ))
+                        :
+                        <div className="flex w-full items-center justify-center p-10 text-xl">
+                            No users found
+                        </div>
                     }
                 </div>
             }

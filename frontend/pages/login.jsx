@@ -12,11 +12,10 @@ export default function Home() {
   const token = tokenService.getAccessToken(null)
   const [addUser] = useMutation(ADD_USER)
 
-  /*
   if(token){
     router.push("/")
   }
-  */
+  
 
   const [values, setValues] = useState({
     email: "thomas.henrique.schmitz@gmail.com",
