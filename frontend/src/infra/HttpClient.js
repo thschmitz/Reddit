@@ -53,21 +53,16 @@ export async function AtualizaToken(fetchUrl, fetchOptions) {
     .then(async (respostaDoServidor) => {
       const access_token = respostaDoServidor.headers.get("authorization");
       const refresh_token = respostaDoServidor.headers.get("refreshtoken");
-  
       const resultado = {
         access_token: access_token,
         refresh_token: refresh_token
       }
-  
       return resultado;
     })
-
   } catch(erro) {
     console.log("erroAtualizacaoTokens: ", erro)
     return erro;
   }
-
-
 }
 
 export async function Session(fetchUrl, fetchOptions) {

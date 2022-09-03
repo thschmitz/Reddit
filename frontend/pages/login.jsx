@@ -10,7 +10,7 @@ export default function Home() {
   const token = tokenService.getAccessToken(null)
 
   if(token){
-    router.push("/dashboard")
+    router.push("/")
   }
 
   const [values, setValues] = useState({
@@ -84,8 +84,7 @@ export default function Home() {
               email:values.email,
               senha:values.senha
             }).then((resposta) => {
-              console.log("RESPOSTALOGIN: ", resposta)
-              router.push("/dashboard");
+              router.push("/");
             }) 
           }}>
             <input type="hidden" name="remember" defaultValue="true" />

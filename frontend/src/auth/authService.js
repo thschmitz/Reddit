@@ -1,8 +1,6 @@
 import { AtualizaToken, CreateAccount, CreatePost, Login, Session } from "../infra/HttpClient.js";
 import { tokenService } from "./tokenService.js";
 
-
-
 export const authService = {
     async login(body) {
         return await Login(`${process.env.NEXT_PUBLIC_BACKEND_URL}/usuario/login`, {
@@ -49,8 +47,6 @@ export const authService = {
                             refresh_token: refresh
                         }
                     }).then(async (res) => {
-                        console.log("Teste: ", res)
-                        
                         tokenService.saveAccessToken(res.access_token, ctx);
                         tokenService.saveRefreshToken(res.refresh_token, ctx);
                         return await Session(`${process.env.NEXT_PUBLIC_BACKEND_URL}/usuario/session`, {

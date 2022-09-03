@@ -1,5 +1,4 @@
 import { authService } from "./authService";
-import { tokenService } from "./tokenService";
 
 export function withSession(funcao) {
   return async (ctx) => {
