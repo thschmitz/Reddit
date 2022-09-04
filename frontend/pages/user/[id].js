@@ -1,25 +1,36 @@
-import React, {useState, useEffect} from 'react'
-import {useRouter} from "next/router"
-import { GET_USER_BY_ID, GET_POST_BY_USERNAME, GET_MARK, GET_FOLLOW_BY_USERNAME_AND_ID, GET_ALL_FOLLOWERS, GET_FOLLOWING_BY_USERNAME, GET_MARK_BY_ID } from '../../graphql/queries';
-import { useQuery, useMutation } from '@apollo/client';
-import Avatar from '../../components/Avatar'
+import { useMutation, useQuery } from '@apollo/client';
+import { BookmarkIcon, HeartIcon } from '@heroicons/react/solid';
 import { Jelly } from '@uiball/loaders';
-import Post from "../../components/Post"
-import { HeartIcon } from '@heroicons/react/solid'
 import { useSession } from 'next-auth/react';
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import Avatar from '../../components/Avatar';
+import Post from "../../components/Post";
 import { DELETE_FOLLOW, INSERT_FOLLOW } from '../../graphql/mutations';
-import Link from "next/link"
-import toast from 'react-hot-toast'
-import { BookmarkIcon } from '@heroicons/react/solid'
+import { GET_ALL_FOLLOWERS, GET_FOLLOWING_BY_USERNAME, GET_FOLLOW_BY_USERNAME_AND_ID, GET_MARK, GET_MARK_BY_ID, GET_POST_BY_USERNAME, GET_USER_BY_ID } from '../../graphql/queries';
+import { withSession } from "../../src/auth/session";
 
-const searchMsg = () => {
+export const getServerSideProps = withSession((ctx) => {
+    const data = ctx.req.session;
+    return {
+      props: {
+        data,
+      }
+    }
+  })
+
+const searchMsg = (props) => {
     const router = useRouter();
-    const {data:session} = useSession();
     const [liked, setLiked] = useState(false)
+    const session = props?.data?.usuarioInfo;
+
+    console.log("IdProps: ", props?.data?.usuarioInfo)
 
     const {data: dataFollowers, loading: loadingFollowing, error: errorFollowing} = useQuery(GET_FOLLOW_BY_USERNAME_AND_ID, {
         variables: {
-            username: session?.user?.name,
+            username: session?.nome,
             id: router?.query?.id
         }
     })
@@ -43,7 +54,7 @@ const searchMsg = () => {
     const followers = dataFollower?.getFollowers?.length;
 
     useEffect(() => {
-        followed?.map((follow: any) => (
+        followed?.map((follow) => (
             follow.follow === true ? setLiked(true) : setLiked(false)
         ))
     }, [followed])
@@ -72,7 +83,7 @@ const searchMsg = () => {
     console.log("marks: ", marks)
 
     const following = dataFollowing?.getFollowing?.length;
-    const posts: Post[] = post?.getPostByUsername;
+    const posts = post?.getPostByUsername;
     const createdHour = `${user?.created_at[8]}${user?.created_at[9]}/${user?.created_at[5]}${user?.created_at[6]}/${user?.created_at[0]}${user?.created_at[1]}${user?.created_at[2]}${user?.created_at[3]} ${user?.created_at[11]}${user?.created_at[12]}:${user?.created_at[14]}${user?.created_at[15]}`
     const qtdPosts = posts?.length;
 
@@ -96,7 +107,7 @@ const searchMsg = () => {
             })
             const {data: {insertFollow: newFollow}} = await deleteFollow({
                 variables: {
-                    username: session?.user?.name,
+                    username: session?.nome,
                     following_id: router.query.id,
                 }  
             });
@@ -107,7 +118,7 @@ const searchMsg = () => {
             })
             const {data: {insertFollow: newFollow}} = await insertFollow({
                 variables: {
-                    username: session?.user?.name,
+                    username: session?.nome,
                     following_id: router.query.id,
                     follow: true,
                 }  
@@ -199,7 +210,7 @@ const searchMsg = () => {
                                 </div>
                             :                                
                                     posts?.length > 0?
-                                    posts.map((post: any) => (
+                                    posts.map((post) => (
                                         <Post key={post.id} post={post}/>
                                     ))
 

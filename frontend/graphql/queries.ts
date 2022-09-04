@@ -230,7 +230,6 @@ export const GET_ALL_POSTS_BY_POST_ID = gql`
 export const GET_FOLLOW_BY_USERNAME_AND_ID = gql`
     query MyQuery($username: String!, $id: ID!){
         getFollowByUsernameAndId(username: $username, id: $id) {
-
             follow
         }
     }
