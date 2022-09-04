@@ -1,38 +1,36 @@
+import { useMutation, useQuery } from "@apollo/client"
 import { ArrowDownIcon, ArrowUpIcon, BookmarkIcon, ChatAltIcon, DotsHorizontalIcon } from '@heroicons/react/solid'
-import React, {useEffect, useState} from 'react'
-import Avatar from './Avatar'
-import TimeAgo from "react-timeago"
+import Button from '@mui/material/Button'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import { Jelly } from "@uiball/loaders"
 import Link from "next/link"
-import {Jelly} from "@uiball/loaders"
-import { useSession } from 'next-auth/react'
+import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { GET_ALL_VOTES_BY_POST_ID, GET_ALL_POSTS, GET_ID_BY_USERNAME, GET_MARK } from '../graphql/queries'
-import {ADD_MARK, DELETE_COMMENT, DELETE_MARK, DELETE_POST, DELETE_VOTE} from "../graphql/mutations"
-import {useQuery, useMutation} from "@apollo/client"
-import {ADD_VOTE} from "../graphql/mutations"
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import TimeAgo from "react-timeago"
+import { ADD_MARK, ADD_VOTE, DELETE_COMMENT, DELETE_MARK, DELETE_POST, DELETE_VOTE } from "../graphql/mutations"
+import { GET_ALL_POSTS, GET_ALL_VOTES_BY_POST_ID, GET_ID_BY_USERNAME, GET_MARK } from '../graphql/queries'
+import Avatar from './Avatar'
 
 type Props = {
-    post: Post
+  post: Post,
+  user: {id: number, nome: string, email: string, senhaHash: string, emailVerificado: number}
 }
 
-const Post = ({post}: Props) => {
+const Post = ({post, user}: Props) => {
   const [vote, setVote] = useState<boolean>()
   const [marked, setMarked] = useState<boolean>(false)
-  const {data:session} = useSession()
+  const session = user;
+  console.log("POST: ", session)
   const [deleteComment] = useMutation(DELETE_COMMENT, {
     variables: {
       id: post?.id
     }
   })
 
-  
-
   const {data: dataId, loading: loadingId, error: errorId} = useQuery(GET_ID_BY_USERNAME, {
     variables:{
-        username: post?.username
+      username: post?.username
     }
   })
 
@@ -40,7 +38,7 @@ const Post = ({post}: Props) => {
 
   const {data: dataIdUsername, loading: loadingIdUsername, error: errorIdUsername} = useQuery(GET_ID_BY_USERNAME, {
     variables:{
-      username: session?.user?.name
+      username: session?.nome
     }
   })
 
@@ -48,7 +46,7 @@ const Post = ({post}: Props) => {
 
   const {data: dataMark, error: errorMark, loading: loadingMark} = useQuery(GET_MARK, {
     variables: {
-      username: session?.user?.name,
+      username: session?.nome,
       post_id: post?.id,
     }
   })
@@ -103,7 +101,7 @@ const Post = ({post}: Props) => {
   useEffect(() => {
     const votes: Vote[] = data?.getVotesByPostId;
 
-    const vote = votes?.find((vote) => vote.username == session?.user?.name)?.upvote
+    const vote = votes?.find((vote) => vote.username == session?.nome)?.upvote
 
     setVote(vote)
 
@@ -135,7 +133,7 @@ const Post = ({post}: Props) => {
     const {data: {insertVote: newVote}} = await addVote({
       variables: {
         post_id: post.id,
-        username: session?.user?.name,
+        username: session?.nome,
         upvote: isUpvote
       }
     })
@@ -180,7 +178,7 @@ const Post = ({post}: Props) => {
       const {data: {deleteMark: newMark}} = await deleteMark({
         variables: {
           post_id: post?.id,
-          username: session?.user?.name,
+          username: session?.nome,
           usernameID: idUsername
         },
         refetchQueries: [GET_MARK, "getMark"]
@@ -191,7 +189,7 @@ const Post = ({post}: Props) => {
       const {data: {insertMark: newMark}} = await addMark({
         variables: {
           post_id: post?.id,
-          username: session?.user?.name,
+          username: session?.nome,
           usernameID: idUsername
         },
         refetchQueries: [GET_MARK, "getMark"]
@@ -263,7 +261,7 @@ const Post = ({post}: Props) => {
                 </div>              
                 <div className="postButtons">
                 {
-                  post?.username === session?.user?.name ?
+                  post?.username === session?.nome ?
                     <Button
                     id="basic-button"
                     aria-controls={open ? 'basic-menu' : undefined}
@@ -287,7 +285,7 @@ const Post = ({post}: Props) => {
                   }}
                 >
                   {
-                    session?.user?.name === post.username ?
+                    session?.nome === post.username ?
                       <div>
                         <Link href="/"><MenuItem onClick={handleDeletePost}>Delete Post</MenuItem></Link>
                         <MenuItem onClick={handleClose}>Edit Post</MenuItem>

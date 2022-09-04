@@ -64,12 +64,12 @@ const Feed = ({topic, user}: Props) => {
               {
                 topic?
                 posts?.map((post:any) => (
-                  <Post key={post.id} post={post} />
+                  <Post key={post.id} post={post} user={user} />
                 ))
                 :
                 dataIdFollowing?.map((id: any) => (
                   posts?.map((post:any) => (
-                    post?.usernameID === id.following_id ? <Post key={post.id} post={post} /> : <div className="invisible"></div>
+                    post?.usernameID === id.following_id ? <Post key={post.id} post={post} user={user}/> : <div className="invisible"></div>
                   ))
                 ))
               }

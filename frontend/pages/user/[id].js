@@ -48,8 +48,6 @@ const searchMsg = (props) => {
         }
     })
 
-
-
     const followed = dataFollowers?.getFollowByUsernameAndId;
     const followers = dataFollower?.getFollowers?.length;
 
@@ -78,10 +76,8 @@ const searchMsg = (props) => {
             id: router?.query?.id
         }
     })
-
+    
     const marks = dataMark?.getMarkById?.length;
-    console.log("marks: ", marks)
-
     const following = dataFollowing?.getFollowing?.length;
     const posts = post?.getPostByUsername;
     const createdHour = `${user?.created_at[8]}${user?.created_at[9]}/${user?.created_at[5]}${user?.created_at[6]}/${user?.created_at[0]}${user?.created_at[1]}${user?.created_at[2]}${user?.created_at[3]} ${user?.created_at[11]}${user?.created_at[12]}:${user?.created_at[14]}${user?.created_at[15]}`
@@ -97,7 +93,6 @@ const searchMsg = (props) => {
             GET_ALL_FOLLOWERS, "getFollowers"
         ]
     })
-
     const heartSubmit = async () => {
         const notification = toast.loading("Creating new Post...");
         if(liked){
@@ -125,9 +120,6 @@ const searchMsg = (props) => {
             });
         }
     }
-
-
-
     return (
         <div className={`h-24 bg-red-400 p-8`}>
             {user?
@@ -138,10 +130,15 @@ const searchMsg = (props) => {
                                 <Avatar seed={user?.username} large />
                             </div>
                             <div className="py-2">
-                                <h1 className="text-3xl font-semibold">Welcome to r/{user?.username} Profile</h1>
+                                {
+                                    user?.id === router.query.id?
+                                        <h1 className="text-3xl font-semibold">Welcome to your Profile</h1>
+                                    :
+                                        <h1 className="text-3xl font-semibold">Welcome to r/{user?.username} Profile</h1>
+                                }
                                 <p><span className="dateCreated">Created Time: </span>{createdHour}<span className="dateCreated"> GMT</span></p>
                                 {
-                                    session?.user?.name !== user?.username ?
+                                    session?.nome !== user?.username ?
                                     <div className="flex items-center">
                                         <div className="flex items-center mr-5 space-x-1">
                                             <Link href={`/user/${router.query.id}/followers`}>
@@ -193,7 +190,7 @@ const searchMsg = (props) => {
                             posts?.length > 0?
                             <div className="text-2xl text-center bg-white rounded-lg mt-10 p-4 flex-1 space-y-4 max-w-5xl my-7 mx-auto">
                                 {
-                                    session?.user?.name === user.username ?
+                                    session?.nome === user.username ?
                                         <h1>See <span className="text-red-400">{qtdPosts} post(s)</span> that <span className="underline">you</span> have already created</h1>
                                     :
                                         <h1>See <span className="text-red-400">{qtdPosts} post(s)</span> that <span className="underline">{user?.username}</span> has already created</h1>
@@ -210,12 +207,9 @@ const searchMsg = (props) => {
                                 </div>
                             :                                
                                     posts?.length > 0?
-                                    posts.map((post) => (
-                                        <Post key={post.id} post={post}/>
-                                    ))
-
-                                
-
+                                        posts.map((post) => (
+                                            <Post key={post.id} post={post} user={session}/>
+                                        ))
                                 :
                                     <div className="flex w-full items-center justify-center p-20 text-xl">
                                         <p>No posts found</p>

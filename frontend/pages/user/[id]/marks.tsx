@@ -1,16 +1,24 @@
-import React from 'react'
-import {useRouter} from "next/router"
-import { GET_MARK_BY_ID, GET_USER_BY_ID } from "../../../graphql/queries";
 import { useQuery } from '@apollo/client';
-import { useSession } from 'next-auth/react';
-import Link from "next/link"
-import { Jelly } from '@uiball/loaders';
 import { ArrowLeftIcon } from '@heroicons/react/solid';
-import User from '../../../components/User';
+import { Jelly } from '@uiball/loaders';
+import { useSession } from 'next-auth/react';
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React from 'react';
 import Post from '../../../components/Post';
+import { GET_MARK_BY_ID, GET_USER_BY_ID } from "../../../graphql/queries";
+import { withSession } from "../../../src/auth/session";
 
-const following = () => {
-    const {data:session} = useSession();
+export const getServerSideProps = withSession((ctx:any) => {
+    const data = ctx.req.session;
+    return {
+      props: {
+        data,
+      }
+    }
+})
+const following = (props:any) => {
+    const session = props?.data?.usuarioInfo;
     const router = useRouter();
 
     const {data: dataUser } = useQuery(GET_USER_BY_ID, {
@@ -43,7 +51,7 @@ const following = () => {
       </div>
     )
 
-    if(user?.username !== session?.user?.name) 
+    if(user?.username !== session?.nome) 
     return(
         <div className="flex w-full items-center justify-center p-20 text-xl">
             <p>You are not allowed to see this page</p>
@@ -62,7 +70,7 @@ const following = () => {
                             {
                                 postsMarked?.map((post:any, index: any) => (
                                     <div key={index} className="mt-10">
-                                        <Post post={post.posts} key={index} />
+                                        <Post post={post.posts} key={index} user={user}/>
                                     </div>
                                 ))
                             }

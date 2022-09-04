@@ -20,13 +20,14 @@ export const getServerSideProps = withSession((ctx:any) => {
     }
 })
 
+type Props = {
+    props?: {id: number, nome: string, email: string, senhaHash: string, emailVerificado: number},
+}
+
 type FormData = {
     comment: string,
 }
 
-type Props = {
-    props?: {id: number, nome: string, email: string, senhaHash: string, emailVerificado: number},
-}
 
 
 function PostPage(props:Props){
@@ -80,7 +81,7 @@ function PostPage(props:Props){
 
     return (
         <div className="mx-auto my-7 max-w-5xl">
-            <Post post={post} />
+            <Post post={post} user={session} />
             {post?
             <div>
                 <div className="-mt-1 rounded-b-md border border-t-0 border-gray-300 bg-white p-5 pl-16">
