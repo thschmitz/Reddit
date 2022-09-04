@@ -28,8 +28,6 @@ type FormData = {
     comment: string,
 }
 
-
-
 function PostPage(props:Props){
     const router = useRouter();
     const [addComment] = useMutation(ADD_COMMENT, {

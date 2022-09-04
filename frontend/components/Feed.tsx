@@ -1,11 +1,10 @@
 import { useQuery } from "@apollo/client"
 import { GlobeIcon } from "@heroicons/react/outline"
 import { Jelly } from "@uiball/loaders"
-import { useSession } from 'next-auth/react'
 import Link from "next/link"
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import SubredditRow from "../components/SubredditRow"
-import { GET_ALL_POSTS, GET_ALL_POSTS_BY_TOPIC, GET_FOLLOWER_ID, GET_ID_BY_USERNAME, GET_SUBREDDITS_WITH_LIMIT } from '../graphql/queries'
+import { GET_ALL_POSTS, GET_ALL_POSTS_BY_TOPIC, GET_FOLLOWER_ID, GET_SUBREDDITS_WITH_LIMIT } from '../graphql/queries'
 import Post from "./Post"
 
 type Props = {
@@ -15,29 +14,17 @@ type Props = {
 
 const Feed = ({topic, user}: Props) => {
 
-  console.log("USER: ", user)
-
-  const {data: session} = useSession();
-
   const {data: dataId, error: errorId} = useQuery(GET_FOLLOWER_ID, {
     variables: {
       username: user?.nome
     }
   })
   const dataIdFollowing = dataId?.getFollowerId;
-
-  /*
-  const {data: dataSession, error: errorSession} = useQuery(GET_ID_BY_USERNAME, {
-    variables: {
-      username: session?.user?.name
-    }
-  })*/
-
   const idSession = user?.id;
 
-  console.log("dataIdFollowing: ", dataIdFollowing);
+  console.log("dataIdFollowing: ", user);
 
-  const {data, error} = !topic ? useQuery(GET_ALL_POSTS) : useQuery(GET_ALL_POSTS_BY_TOPIC, {
+  const {data} = !topic ? useQuery(GET_ALL_POSTS) : useQuery(GET_ALL_POSTS_BY_TOPIC, {
     variables: {
       topic: topic,
     }
@@ -52,7 +39,6 @@ const Feed = ({topic, user}: Props) => {
   })
 
   const subreddits: Subreddit[] = subredditData?.getSubredditListLimit;
-
 
   return (
     <div className="mt-12 space-y-4">
@@ -92,7 +78,7 @@ const Feed = ({topic, user}: Props) => {
           </div>
         :
           <div className="flex flex-col w-full items-center mt-52 justify-center p-10 text-xl">
-              <h1>Login to see your followers's content</h1>
+              <h1>Login to see the content</h1>
               <Link href="/login"><button className="bg-red-400 p-3 rounded-2xl mt-4 text-white">Sign in</button></Link>
           </div>
         
