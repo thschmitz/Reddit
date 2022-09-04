@@ -6,7 +6,6 @@ import Post from "../components/Post"
 import SubredditRow from "../components/SubredditRow"
 import User from '../components/User'
 import { GET_ALL_POSTS, GET_ALL_USERS_WITH_LIMIT, GET_SUBREDDITS_WITH_LIMIT } from '../graphql/queries'
-import { withSession } from "../src/auth/session"
 
 const global = () => {
   const {data, error} =  useQuery(GET_ALL_POSTS)

@@ -1,28 +1,44 @@
-import React from 'react'
-import {useRouter} from "next/router"
-import { GET_ALL_POSTS_BY_POST_ID } from '../../graphql/queries';
-import {useQuery, useMutation} from "@apollo/client"
-import Post from '../../components/Post';
+import { useMutation, useQuery } from "@apollo/client";
 import { useSession } from 'next-auth/react';
-import {SubmitHandler, useForm} from "react-hook-form"
-import { ADD_COMMENT } from '../../graphql/mutations';
+import { useRouter } from "next/router";
+import React from 'react';
+import { SubmitHandler, useForm } from "react-hook-form";
 import toast from 'react-hot-toast';
+import TimeAgo from "react-timeago";
 import Avatar from '../../components/Avatar';
-import TimeAgo from "react-timeago"
+import Post from '../../components/Post';
+import { ADD_COMMENT } from '../../graphql/mutations';
+import { GET_ALL_POSTS_BY_POST_ID } from '../../graphql/queries';
+import { withSession } from "../../src/auth/session";
 
+export const getServerSideProps = withSession((ctx:any) => {
+    const data = ctx.req.session;
+    return {
+      props: {
+        data,
+      }
+    }
+})
 
 type FormData = {
     comment: string,
 }
 
+type Props = {
+    props?: {id: number, nome: string, email: string, senhaHash: string, emailVerificado: number},
+}
 
-function PostPage(){
+
+function PostPage(props:Props){
     const router = useRouter();
     const [addComment] = useMutation(ADD_COMMENT, {
         refetchQueries: [GET_ALL_POSTS_BY_POST_ID, "getPostListByPostId"],
     })
 
-    const {data: session} = useSession()
+    console.log("USERPOST: ", props)
+
+    const session = props?.data?.usuarioInfo;
+
     const {loading, error, data} = useQuery(GET_ALL_POSTS_BY_POST_ID, {
         variables: {
             post_id: router.query.postId
@@ -49,7 +65,7 @@ function PostPage(){
         await addComment({
             variables: {
                 post_id: router.query.postId,
-                username: session?.user?.name,
+                username: session?.nome,
                 text: data.comment
             }
         })
@@ -68,7 +84,7 @@ function PostPage(){
             {post?
             <div>
                 <div className="-mt-1 rounded-b-md border border-t-0 border-gray-300 bg-white p-5 pl-16">
-                    <p className="text-sm">Comment as <span className="text-red-500">{session?.user?.name}</span></p>
+                    <p className="text-sm">Comment as <span className="text-red-500">{session?.nome}</span></p>
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-2"> {/*Another way to do the same thing as the first try */}
                         <textarea {...register('comment')} disabled={!session} className="h-24 rounded-md border border-gray-200 p-2 pl-4 outline-none disabled:bg-gray-50" placeholder={session? "What are your thoughts" : "Please sign in to comment"}/>
                         <button disabled={!session} type="submit" className="rounded-full bg-red-500 p-3 font-semibold text-white disabled:bg-gray-200">Comment</button>
