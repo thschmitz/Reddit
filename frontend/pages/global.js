@@ -6,19 +6,32 @@ import Post from "../components/Post"
 import SubredditRow from "../components/SubredditRow"
 import User from '../components/User'
 import { GET_ALL_POSTS, GET_ALL_USERS_WITH_LIMIT, GET_SUBREDDITS_WITH_LIMIT } from '../graphql/queries'
+import { withSession } from "../src/auth/session"
 
-const global = () => {
+export const getServerSideProps = withSession((ctx) => {
+  const data = ctx.req.session;
+  return {
+    props: {
+      data,
+    }
+  }
+})
+
+
+
+const global = (props) => {
   const {data, error} =  useQuery(GET_ALL_POSTS)
 
-  const posts: Post[] =  data?.getPostList;
-
+  const posts =  data?.getPostList;
+  const user = props?.data?.usuarioInfo;
+  console.log("GlobalUser: ", user)
 
   const {data: subredditData} = useQuery(GET_SUBREDDITS_WITH_LIMIT, {
     variables: {
       limit: 5,
     }
   })
-  const subreddits: Subreddit[] = subredditData?.getSubredditListLimit;
+  const subreddits = subredditData?.getSubredditListLimit;
 
   const {data:dataUser, loading: loadingUser} = useQuery(GET_ALL_USERS_WITH_LIMIT, {
     variables: {
@@ -37,7 +50,7 @@ const global = () => {
             <div>
               {
                 posts?.map((post) => (
-                  <Post key={post.id} post={post}/>
+                  <Post key={post.id} post={post} user={user}/>
                 ))
               }
             </div>  
@@ -48,7 +61,7 @@ const global = () => {
                 <SubredditRow topic={subreddit.topic} index={i} key={subreddit.id}/>
               ))}
               <p className="text-md mb-1 p-4 pb-3 font-bold">Top Users</p>
-              {users?.map((user:any, i:number) => (
+              {users?.map((user, i) => (
                 <User key={user.id} user={user} globalStatement={true} index={i} following={false}/>
                 ))}
             </div>

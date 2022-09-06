@@ -23,6 +23,8 @@ const Header = (props:any) => {
         }
     })
 
+    const isSession = tokenService.getAccessToken();
+
     const [state, setState] = React.useState({
         top: false,
         left: false,
@@ -100,12 +102,10 @@ const Header = (props:any) => {
             <div className="items-center space-x-2 text-gray-500 mx-5 hidden lg:inline-flex">
                 <SparklesIcon className="icon"/>
                 <Link href="/global"><GlobeIcon className="icon"/></Link>
-                <VideoCameraIcon  className="icon"/>
-                <hr className="h-10 border border-gray-100"/>
                 <ChatIcon className="icon"/>
+                <hr className="h-10 border border-gray-100"/>
                 <BellIcon className="icon"/>
                 <PlusIcon className="icon"/>
-                <SpeakerphoneIcon className="icon"/>
             </div>
             <div className="ml-5 flex items-center lg:hidden">
                 <MenuIcon className="icon" onClick={toggleDrawer(true)}/>
@@ -127,7 +127,7 @@ const Header = (props:any) => {
                 </form>
                 <hr></hr>
                 {
-                    session?
+                    isSession?
                     <div onClick={() => handleLogout()} className="icon-sm">
                         <div className="relative h-5 w-5 flex-shrink-0">
                             <Image objectFit="contain" layout="fill" src="https://links.papareact.com/23l"  alt="" />
@@ -149,7 +149,7 @@ const Header = (props:any) => {
                 }
             </Drawer>
             {
-                session?(
+                isSession?(
                     <div onClick={() => handleLogout()} className="hidden lg:flex items-center cursor-pointer space-x-2 border border-gray-100 p-2">
                         <div className="relative h-5 w-5 flex-shrink-0">
                             <Image objectFit="contain" layout="fill" src="https://links.papareact.com/23l"  alt="" />
