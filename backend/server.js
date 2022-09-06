@@ -11,6 +11,10 @@ app.use((req,res, next) => {
     next();
 })
 
+app.get('/', (req, res) => {
+    res.send("Api is running correctly");
+})
+
 const routes = require('./rotas');
 routes(app);
 
