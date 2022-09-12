@@ -1,0 +1,501 @@
+type Comment {
+  created_at: DateTime
+  id: ID!
+  post_id: ID
+  text: String
+  username: String
+}
+
+type Mark {
+  created_at: DateTime
+  id: ID!
+  post_id: ID
+  username: String
+  usernameID: ID
+  posts: Post
+    @materializer(
+      query: "getPostListByPostId",
+      arguments: [{name: "post_id", field: "post_id"}]
+    )
+}
+
+type Follow{
+  created_at: DateTime
+  id: ID!
+  following_id: ID!
+  username: String!
+  follow: Boolean!
+}
+
+type FollowID{
+  id: ID!
+}
+
+type User {
+  created_at: DateTime
+  id: ID!
+  username: String
+  posts: [Post]
+    @materializer(
+      query: "getPostByUsername",
+      arguments: [{ name: "username", field: "username" }]
+
+    )
+
+  followers: [Follow]
+    @materializer(
+      query: "getFollowers",
+      arguments: [{ name: "following_id", field: "id" }]
+    )
+  following: [Follow]
+    @materializer(
+      query: "getFollowing",
+      arguments: [{ name: "username", field: "username" }]
+    )
+}
+
+type Post {
+  body: String
+  created_at: DateTime
+  id: ID!
+  image: String
+  subreddit_id: ID
+  title: String
+  username: String
+  usernameID: ID
+  #comments
+  comments: [Comment]
+    @materializer(
+      query: "getCommentByPostId",
+      arguments: [{name: "post_id", field: "id"}]
+    )
+  #votes
+  votes: [Vote]
+    @materializer(
+      query: "getVotesByPostId",
+      arguments: [{name: "post_id", field: "id"}]
+  )
+
+  subreddit: [Subreddit]
+    @materializer(
+      query: "getSubredditListById",
+      arguments: [{name: "id", field: "subreddit_id"}]
+    )
+
+}
+
+type Subreddit {
+  created_at: DateTime
+  id: ID!
+  topic: String
+}
+
+type Vote {
+  created_at: DateTime
+  id: ID!
+  post_id: ID
+  upvote: Boolean
+  username: String
+}
+
+type Query {
+  getCommentList: [Comment]
+    @dbquery(
+      type: "postgresql"
+      table: "comment"
+      configuration: "postgresql_config"
+    )
+
+  getVotesByPostId(post_id: ID!): [Vote]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "vote" where "post_id" = $1 order by "created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
+
+  getSubredditListById(id: ID!): [Subreddit]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "subreddit" where "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  
+  getUsers: [User]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "users"
+      """
+      configuration: "postgresql_config"
+    )
+
+  getUserWithLimit(limit: Int!): [User]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "users" limit $1
+      """
+      configuration: "postgresql_config"
+    )
+  
+  
+  getUserById(id: ID!): User
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "users" where "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  
+  getPostByUsername(username: String!): [Post]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "post" where "username" = $1
+      order by "created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
+  
+  getIdByUsername(username: String!): User
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "users" where "username" = $1
+      """
+      configuration: "postgresql_config"
+    )
+
+  getUsersBySearch(search: String!): [User]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "users" where "username"
+      like '%' || $1 || '%'
+      order by "created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
+
+  searchUsername(username: String!): [User]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "users" where "username" like $1
+      """
+      configuration: "postgresql_config"
+    )
+  
+  getFollowers(following_id: ID!): [Follow]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "followers" where "following_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  
+  getFollowing(username: String!): [Follow]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "followers" where "username" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  
+
+  getPostBySearch(search: String!): [Post]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "post" where "title"
+      like '%' || $1 || '%' or "body" like '%' || $1 || '%'
+      order by "created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
+
+  getSubredditListLimit(limit: Int!): [Subreddit]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "subreddit" 
+      order by "created_at" desc
+      limit $1
+      """
+      configuration: "postgresql_config"
+    )
+
+
+  """
+  This query is an example of how to simply paginate your responses.
+  """
+
+  getPaginatedCommentList(first: Int!, after: Int!): [Comment]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "comment" limit $1 offset $2
+      """
+      configuration: "postgresql_config"
+    )
+
+  """
+  In this example, a single query parameter is passed. If the request to the DB will
+  return at most one value you can remove the square brackets from the result.
+  """
+
+  getCommentByPostId(post_id: ID!): [Comment]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "comment" where "post_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+
+  """
+  In this example, two query parameters are passed. If the request to the DB will
+  return at most one value you can remove the square brackets from the result.
+  """
+
+
+  getCommentByPost_idAndUsername(post_id: ID!, username: String!): [Comment]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "comment" where "post_id" = $1 and "username" = $2
+      """
+      configuration: "postgresql_config"
+    )
+  getPostList: [Post]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select *, "post".id as id from "post"
+      order by "post"."created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
+
+  getPostWithUsers(id: ID!): [User]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "users" where id = $1
+      """
+      configuration: "postgresql_config"
+    )
+  
+  getFollowerId(username: String!): [Follow]
+    @dbquery(
+      type: "postgresql"
+      query: """
+        select * from "followers" where "username" = $1
+
+      """
+      configuration: "postgresql_config"
+    )
+
+  getPostListByTopic(topic: String!): [Post]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select *, "post".id as id from "post"
+      join "subreddit" on "subreddit"."id" = "post"."subreddit_id"
+      where "subreddit"."topic" = $1
+      order by "post"."created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
+
+
+
+  getPostListByPostId(post_id: ID!) : Post
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "post"
+      where "post"."id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+
+  getFollowByUsernameAndId(username: String!, id: ID!): [Follow]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select "follow" from "followers" where "username" = $1 and "following_id" = $2 order by "created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
+  getSubredditList: [Subreddit]
+    @dbquery(
+      type: "postgresql"
+      table: "subreddit"
+      configuration: "postgresql_config"
+    )
+  getSubredditListByTopic(topic: String!): [Subreddit]
+    @dbquery(
+      type: "postgresql"
+      query: """
+        select * from "subreddit" where "topic" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  getVoteList: [Vote]
+    @dbquery(
+      type: "postgresql"
+      table: "vote"
+      configuration: "postgresql_config"
+    )
+  
+  getMark(username: String!, post_id: ID!): [Mark]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "marks" where "username" = $1 and "post_id" = $2
+      """
+      configuration: "postgresql_config"
+    )
+  
+  getMarkById(id: ID!): [Mark]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "marks" where "usernameID" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  
+  getMarkByPostId(post_id: ID!): [Mark]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "marks" where "post_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+}
+
+type Mutation {
+  """
+  In this mutation example you can see how to do a mutation to insert data in the database.
+  """
+  insertPost(
+    image: String!
+    body: String!
+    subreddit_id: ID!
+    title: String!
+    username: String!
+    usernameID: ID!
+  ): Post
+    @dbquery(
+      type: "postgresql"
+      table: "post"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  insertSubreddit(topic: String!): Subreddit 
+    @dbquery(
+      type: "postgresql"
+      table: "subreddit"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  
+  insertComment(post_id: ID!, username: String!, text: String!): Comment
+    @dbquery(
+      type: "postgresql"
+      table: "comment"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  
+  insertVote(post_id: ID!, username: String!, upvote: Boolean! ) : Vote
+    @dbquery(
+      type: "postgresql"
+      table: "vote"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  
+  insertUser(username: String!) : User
+    @dbquery(
+      type: "postgresql"
+      table: "users"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+
+  insertFollow(username: String!, following_id: ID!, follow: Boolean!): Follow
+    @dbquery(
+      type: "postgresql"
+      table: "followers"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+
+  insertMark(username: String!, post_id: ID!, usernameID: ID!): Mark
+    @dbquery(
+      type: "postgresql"
+      table: "marks"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+
+  """
+  In this mutation example you can see how to do a mutation to delete data from the database.
+  """
+
+  deleteMark(username: String!, post_id: ID!, usernameID: ID!): Mark
+    @dbquery(
+      type: "postgresql"
+      table: "marks"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+
+  deleteFollow(username: String!, following_id: ID!): Follow
+    @dbquery(
+      type: "postgresql"
+      table: "followers"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+
+  deleteComment(
+    post_id: ID!
+
+  ): Comment
+    @dbquery(
+      type: "postgresql"
+      table: "comment"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+
+  deleteVote(post_id: ID!): Vote
+    @dbquery(
+      type: "postgresql"
+      table: "vote"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+
+  deletePost(id: ID!): Post
+    @dbquery(
+      type: "postgresql"
+      table: "post"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )    
+
+  
+}
